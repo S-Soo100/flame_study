@@ -2,10 +2,10 @@ import 'package:flame/components.dart';
 import 'package:flame/experimental.dart';
 import 'package:flutter/material.dart';
 
-class GameButton extends RectangleComponent with TapCallbacks {
+class SlimeButton extends RectangleComponent with TapCallbacks {
   static const buttonSize = 120.0;
   final Function func;
-  GameButton({
+  SlimeButton({
     required this.func,
     required position,
   }) : super(

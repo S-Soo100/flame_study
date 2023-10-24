@@ -36,7 +36,7 @@ class Slime extends SpriteAnimationComponent
 
   Future<void> _loadAnimations() async {
     final spriteSheet = SpriteSheet(
-        image: await gameRef.images.load('slime_sprite_sheet.png'),
+        image: await gameRef.images.load('slime_world/slime_sprite_sheet.png'),
         srcSize: Vector2(16.0, 16.0));
 
     _standingAnimation = spriteSheet.createAnimation(

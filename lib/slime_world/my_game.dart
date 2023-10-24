@@ -1,8 +1,8 @@
 import 'package:flame/components.dart';
 import 'package:flame/experimental.dart';
-import 'package:flame_practice/game/game_components/game_button.dart';
-import 'package:flame_practice/game/game_components/i_back_ground.dart';
-import 'package:flame_practice/game/game_components/slime.dart';
+import 'package:flame_practice/slime_world/game_components/slime_button.dart';
+import 'package:flame_practice/slime_world/game_components/slime_background.dart';
+import 'package:flame_practice/slime_world/game_components/slime.dart';
 import 'package:flame/game.dart';
 import 'package:flutter/material.dart';
 
@@ -10,14 +10,14 @@ class MyGame extends FlameGame with TapCallbacks, HasCollisionDetection {
   late Slime _slime;
   late Slime _slime2;
   late Slime _slime3;
-  late GameButton _button1;
-  late GameButton _button2;
+  late SlimeButton _button1;
+  late SlimeButton _button2;
   bool goLeft = false;
 
   @override
   Color backgroundColor() => const Color(0xffe6e6e6);
 
-  final IBackGround _backGround = IBackGround();
+  final SlimeBackground _backGround = SlimeBackground();
 
   @override
   Future<void> onLoad() async {
@@ -27,12 +27,12 @@ class MyGame extends FlameGame with TapCallbacks, HasCollisionDetection {
     _slime = Slime(type: 1, position: Vector2(size.x / 2, size.y - 200));
     _slime2 = Slime(type: 2, position: Vector2(size.x - 200, size.y - 200));
     _slime3 = Slime(type: 3, position: Vector2(200, size.y - 200));
-    _button1 = GameButton(
+    _button1 = SlimeButton(
         func: () {
           _moveLeft(_slime);
         },
         position: Vector2(100, size.y - 20));
-    _button2 = GameButton(
+    _button2 = SlimeButton(
         func: () {
           _moveRight(_slime);
         },
