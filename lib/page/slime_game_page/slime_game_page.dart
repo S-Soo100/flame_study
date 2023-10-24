@@ -1,25 +1,26 @@
 import 'package:flame/game.dart';
-import 'package:flame_practice/game/my_game.dart';
+import 'package:flame_practice/game/slime_world/slime_game.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/src/widgets/container.dart';
-import 'package:flutter/src/widgets/framework.dart';
 
-class GameScreen extends StatefulWidget {
-  const GameScreen({super.key});
+class SlimeGamePage extends StatefulWidget {
+  const SlimeGamePage({super.key});
 
   @override
-  State<GameScreen> createState() => _GameScreenState();
+  State<SlimeGamePage> createState() => _SlimeGamePageState();
 }
 
-class _GameScreenState extends State<GameScreen> {
+class _SlimeGamePageState extends State<SlimeGamePage> {
   @override
   Widget build(BuildContext context) {
-    return Material(
-      child: Center(
+    return Scaffold(
+      appBar: AppBar(
+        title: Text("Slime Game"),
+      ),
+      body: Center(
         child: Padding(
           padding: const EdgeInsets.all(0.0),
           child: GameWidget(
-            game: MyGame(),
+            game: SlimeGame(),
             overlayBuilderMap: {
               'PauseMenu': (context, game) {
                 return Container(

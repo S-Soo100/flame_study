@@ -1,12 +1,12 @@
 import 'package:flame/components.dart';
 import 'package:flame/experimental.dart';
-import 'package:flame_practice/slime_world/game_components/slime_button.dart';
-import 'package:flame_practice/slime_world/game_components/slime_background.dart';
-import 'package:flame_practice/slime_world/game_components/slime.dart';
+import 'package:flame_practice/game/slime_world/game_components/slime_button.dart';
+import 'package:flame_practice/game/slime_world/game_components/slime_background.dart';
+import 'package:flame_practice/game/slime_world/game_components/slime.dart';
 import 'package:flame/game.dart';
 import 'package:flutter/material.dart';
 
-class MyGame extends FlameGame with TapCallbacks, HasCollisionDetection {
+class SlimeGame extends FlameGame with TapCallbacks, HasCollisionDetection {
   late Slime _slime;
   late Slime _slime2;
   late Slime _slime3;
