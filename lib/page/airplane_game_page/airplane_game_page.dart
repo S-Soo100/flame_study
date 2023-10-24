@@ -22,12 +22,19 @@ class _AirplaneGamePageState extends State<AirplaneGamePage> {
         child: Stack(
           children: [
             GameWidget(game: AirplaneGame()),
-            const Align(
+            Align(
                 alignment: Alignment.center,
-                child: AirplaneCenterOverlayWidget())
+                child: AirplaneCenterOverlayWidget(
+                  leftTap: _,
+                  rightTap: _,
+                ))
           ],
         ),
       ),
     );
+  }
+
+  void _() {
+    print("tap tap tap ");
   }
 }
