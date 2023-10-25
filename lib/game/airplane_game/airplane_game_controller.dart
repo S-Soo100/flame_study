@@ -32,8 +32,9 @@ class AirplaneGameController extends GetxController {
 
   void gameStart() {
     _state.value = Ready();
-    Future.delayed(Duration(seconds: 3), () {
+    Future.delayed(const Duration(seconds: 3), () {
       _state.value = Playing();
+      _score.value = 0;
       _hitPoint.value = 5;
     });
   }
