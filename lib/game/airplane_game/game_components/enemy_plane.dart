@@ -2,15 +2,17 @@ import 'dart:math';
 import 'dart:async' as ASYNC;
 import 'package:flame/collisions.dart';
 import 'package:flame/components.dart';
+import 'package:flame_practice/game/airplane_game/airplane_game_controller.dart';
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
 
 enum EnemyPlainState { flying, hit }
 
 class EnemyPlain extends SpriteComponent with HasGameRef, CollisionCallbacks {
   static const double enemySize = 60.0;
+  late AirplaneGameController _controller;
   final int speed;
-  final Function upScore;
-  EnemyPlain({required position, required this.speed, required this.upScore})
+  EnemyPlain({required position, required this.speed})
       : super(size: Vector2.all(enemySize), position: position);
 
   late ShapeHitbox hitbox;
@@ -43,6 +45,7 @@ class EnemyPlain extends SpriteComponent with HasGameRef, CollisionCallbacks {
   @override
   void onLoad() async {
     super.onLoad();
+    _controller = Get.find<AirplaneGameController>();
     planeType = initRandomType();
     _spirte = await gameRef.loadSprite(planeType);
     sprite = _spirte;
@@ -74,7 +77,7 @@ class EnemyPlain extends SpriteComponent with HasGameRef, CollisionCallbacks {
       }
       if (position.y < game.size.y) {
         removeFromParent();
-        upScore();
+        _controller.upScore(planeScore);
       } else {}
       //...
     } else {

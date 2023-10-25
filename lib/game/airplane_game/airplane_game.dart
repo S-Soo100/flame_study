@@ -3,28 +3,31 @@ import 'dart:math';
 import 'package:flame/collisions.dart';
 import 'package:flame/experimental.dart';
 import 'package:flame/game.dart';
+import 'package:flame_practice/core/state/game_state.dart';
+import 'package:flame_practice/game/airplane_game/airplane_game_controller.dart';
 import 'package:flame_practice/game/airplane_game/game_components/airplane_game_bg.dart';
 import 'package:flame_practice/game/airplane_game/game_components/enemy_plane.dart';
 import 'package:flame_practice/game/airplane_game/game_components/player_plane.dart';
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
 
 class AirplaneGame extends FlameGame with TapCallbacks, HasCollisionDetection {
   final AirplaneGameBg _gameBg = AirplaneGameBg();
+  late AirplaneGameController _controller;
   late Timer? _timer;
   late Timer? _timer2;
   late PlayerPlane _player;
   Function moveLeft;
   Function moveRight;
-  Function scoreUp;
 
-  AirplaneGame(
-      {required this.moveLeft, required this.moveRight, required this.scoreUp});
+  AirplaneGame({required this.moveLeft, required this.moveRight});
 
   @override
   Color backgroundColor() => const Color(0xff434343);
 
   @override
   Future<void> onLoad() async {
+    _controller = Get.find<AirplaneGameController>();
     add(ScreenHitbox());
     await add(_gameBg);
     _player = PlayerPlane(
@@ -32,10 +35,14 @@ class AirplaneGame extends FlameGame with TapCallbacks, HasCollisionDetection {
     await add(_player);
 
     _timer = Timer.periodic(const Duration(milliseconds: 2200), (timer) {
-      addEnemy();
+      if (_controller.state is Playing) {
+        addEnemy();
+      }
     });
     _timer2 = Timer.periodic(const Duration(milliseconds: 2800), (timer) {
-      addEnemy();
+      if (_controller.state is Playing) {
+        addEnemy();
+      }
     });
   }
 
@@ -52,13 +59,7 @@ class AirplaneGame extends FlameGame with TapCallbacks, HasCollisionDetection {
   }
 
   void addEnemy() async {
-    int randomDx = Random().nextInt(13) + 1;
-    int randomSpeed = Random().nextInt(7) + 2;
-    EnemyPlain enemy = EnemyPlain(
-        position: Vector2(randomDx * 30, 30),
-        speed: randomSpeed,
-        upScore: scoreUp);
-    add(enemy);
+    add(_controller.addRandomEnemy());
   }
 
   void flyLeft() {
@@ -72,6 +73,6 @@ class AirplaneGame extends FlameGame with TapCallbacks, HasCollisionDetection {
   }
 
   void hitAction() {
-    // scoreUp();
+    _controller.hit();
   }
 }

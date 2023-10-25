@@ -2,7 +2,9 @@ import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 
 class TopScoreOverlayWidget extends StatelessWidget {
-  TopScoreOverlayWidget({super.key, required this.score});
+  TopScoreOverlayWidget(
+      {super.key, required this.hitPoint, required this.score});
+  int hitPoint;
   int score;
   String _score() {
     String scoreText = score.toString();
@@ -32,7 +34,21 @@ class TopScoreOverlayWidget extends StatelessWidget {
       child: Row(
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
         children: [
-          const SizedBox(),
+          Container(
+            width: 60,
+            height: 60,
+            decoration: BoxDecoration(
+              borderRadius: BorderRadius.circular(20),
+              border: Border.all(color: Colors.white, width: 1),
+              color: Colors.white.withOpacity(0.4),
+            ),
+            alignment: Alignment.center,
+            child: Text(
+              "❤️${hitPoint}",
+              style: const TextStyle(
+                  color: Colors.red, fontWeight: FontWeight.bold, fontSize: 18),
+            ),
+          ),
           Container(
             width: 180,
             height: 60,
@@ -43,7 +59,7 @@ class TopScoreOverlayWidget extends StatelessWidget {
             ),
             alignment: Alignment.center,
             child: Text(
-              "Score : ${_score()}",
+              "Score: ${_score()}",
               style: const TextStyle(
                   color: Colors.white,
                   fontWeight: FontWeight.bold,
