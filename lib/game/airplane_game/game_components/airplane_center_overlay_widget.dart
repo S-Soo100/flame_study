@@ -1,3 +1,5 @@
+import 'dart:async';
+
 import 'package:flutter/material.dart';
 
 class AirplaneCenterOverlayWidget extends StatefulWidget {
@@ -14,14 +16,15 @@ class AirplaneCenterOverlayWidget extends StatefulWidget {
 
 class _AirplaneCenterOverlayWidgetState
     extends State<AirplaneCenterOverlayWidget> {
-  Color _left = Colors.white;
-  Color _right = Colors.white;
+  Color _left = Colors.white.withOpacity(0.5);
+  Color _right = Colors.white.withOpacity(0.5);
+  late Timer? _timer;
 
   void changeLeftColor() {
     setState(() {
-      _left = Colors.amberAccent;
+      _left = Colors.redAccent.withOpacity(0.5);
       Future.delayed(const Duration(milliseconds: 200), () {
-        _left = Colors.white;
+        _left = Colors.white.withOpacity(0.5);
         setState(() {});
       });
     });
@@ -29,9 +32,9 @@ class _AirplaneCenterOverlayWidgetState
 
   void changeRightColor() {
     setState(() {
-      _right = Colors.amberAccent;
+      _right = Colors.redAccent.withOpacity(0.5);
       Future.delayed(const Duration(milliseconds: 200), () {
-        _right = Colors.white;
+        _right = Colors.white.withOpacity(0.5);
         setState(() {});
       });
     });
@@ -46,6 +49,14 @@ class _AirplaneCenterOverlayWidgetState
           onTap: () {
             widget.leftTap();
             changeLeftColor();
+          },
+          onLongPress: () {
+            _timer = Timer.periodic(Duration(milliseconds: 150), (timer) {
+              widget.leftTap();
+            });
+          },
+          onLongPressEnd: (details) {
+            _timer?.cancel();
           },
           child: Padding(
             padding: const EdgeInsets.all(8.0),
@@ -63,6 +74,14 @@ class _AirplaneCenterOverlayWidgetState
           onTap: () {
             widget.rightTap();
             changeRightColor();
+          },
+          onLongPress: () {
+            _timer = Timer.periodic(Duration(milliseconds: 150), (timer) {
+              widget.rightTap();
+            });
+          },
+          onLongPressEnd: (details) {
+            _timer?.cancel();
           },
           child: Padding(
             padding: const EdgeInsets.all(8.0),
