@@ -37,23 +37,23 @@ class _AirplaneGamePageState extends State<AirplaneGamePage> {
         ),
         body: Center(
           child: LayoutBuilder(
-            builder: (BuildContext, BoxConstraints) {
-              if (BoxConstraints.maxWidth > 500) {
+            builder: (BuildContext context, BoxConstraints constraints) {
+              if (constraints.maxWidth > 500) {
                 return Center(
                   child: SizedBox(
                     width: 450,
                     height: Get.height,
-                    child: newMethod(),
+                    child: _gameScreen(),
                   ),
                 );
               }
-              return newMethod();
+              return _gameScreen();
             },
           ),
         ));
   }
 
-  Widget newMethod() {
+  Widget _gameScreen() {
     return Stack(
       children: [
         GameWidget(game: _game),

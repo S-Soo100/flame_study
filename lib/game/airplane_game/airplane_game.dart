@@ -42,6 +42,7 @@ class AirplaneGame extends FlameGame with TapCallbacks, HasCollisionDetection {
   @override
   void onRemove() {
     _timer?.cancel();
+    _timer2?.cancel();
     super.onRemove();
   }
 
