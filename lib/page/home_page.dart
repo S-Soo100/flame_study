@@ -34,6 +34,7 @@ class HomePage extends StatelessWidget {
           width: 120,
           height: 30,
           color: Colors.amber,
+          alignment: Alignment.center,
           child: Text("${_list.keys.toList()[index]}"),
         ),
       ),

@@ -1,3 +1,4 @@
+import 'package:flame_practice/initial_bindings.dart';
 import 'package:flame_practice/page/home_page.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
@@ -9,12 +10,11 @@ void main() {
 
 class MyApp extends StatelessWidget {
   const MyApp({super.key});
-
-  // This widget is the root of your application.
   @override
   Widget build(BuildContext context) {
     return GetMaterialApp(
-      title: 'Flutter Demo',
+      title: 'Flutter Flame Practice',
+      initialBinding: InitialBindings(),
       home: HomePage(),
     );
   }
