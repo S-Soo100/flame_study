@@ -1,5 +1,5 @@
 import 'dart:math';
-
+import 'dart:async' as ASYNC;
 import 'package:flame/collisions.dart';
 import 'package:flame/components.dart';
 import 'package:flutter/material.dart';
@@ -15,28 +15,49 @@ class EnemyPlain extends SpriteComponent with HasGameRef, CollisionCallbacks {
   late ShapeHitbox hitbox;
   EnemyPlainState _state = EnemyPlainState.flying;
   EnemyPlainState get state => _state;
+  late String planeType;
 
-  Future<Sprite> randomSprite() async {
+  late Sprite? _spirte;
+
+  // Future<Sprite> randomSprite() async {
+  //   int type = Random().nextInt(4);
+  //   switch (type) {
+  //     case 0:
+  //       return await gameRef.loadSprite('airplane_game/enemies/enemy1-1.png');
+  //     case 1:
+  //       return await gameRef.loadSprite('airplane_game/enemies/enemy2-1.png');
+  //     case 2:
+  //       return await gameRef.loadSprite('airplane_game/enemies/enemy3-1.png');
+  //     case 3:
+  //       return await gameRef
+  //           .loadSprite('airplane_game/choppers/chopper2-2.png');
+  //     default:
+  //       return await gameRef.loadSprite('airplane_game/enemies/enemy3-1.png');
+  //   }
+  // }
+
+  String initRandomType() {
     int type = Random().nextInt(4);
     switch (type) {
       case 0:
-        return await gameRef.loadSprite('airplane_game/enemies/enemy1-1.png');
+        return 'airplane_game/enemies/enemy1-1.png';
       case 1:
-        return await gameRef.loadSprite('airplane_game/enemies/enemy2-1.png');
+        return 'airplane_game/enemies/enemy2-1.png';
       case 2:
-        return await gameRef.loadSprite('airplane_game/enemies/enemy3-1.png');
+        return 'airplane_game/enemies/enemy3-1.png';
       case 3:
-        return await gameRef
-            .loadSprite('airplane_game/choppers/chopper2-2.png');
+        return 'airplane_game/choppers/chopper2-2.png';
       default:
-        return await gameRef.loadSprite('airplane_game/enemies/enemy3-1.png');
+        return 'airplane_game/enemies/enemy3-1.png';
     }
   }
 
   @override
   void onLoad() async {
     super.onLoad();
-    sprite = await randomSprite();
+    planeType = initRandomType();
+    _spirte = await gameRef.loadSprite(planeType);
+    sprite = _spirte;
     position = position;
 
     final Paint defaultPaint = Paint()
@@ -69,8 +90,26 @@ class EnemyPlain extends SpriteComponent with HasGameRef, CollisionCallbacks {
     }
   }
 
+  ASYNC.Timer? destroyTimer;
+
+  void destroy() async {
+    _spirte = await gameRef.loadSprite(planeType);
+    bool blink = false;
+    sprite = null;
+    destroyTimer = ASYNC.Timer.periodic(Duration(milliseconds: 50), (timer) {
+      if (blink == true) {
+        sprite = null;
+        blink = false;
+      } else {
+        sprite = _spirte;
+        blink = true;
+      }
+    });
+  }
+
   void stopPlane() {
     _state = EnemyPlainState.hit;
+    destroy();
     Future.delayed(Duration(seconds: 1), (() => removeFromParent()));
   }
 }

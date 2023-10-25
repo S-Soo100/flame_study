@@ -53,7 +53,7 @@ class AirplaneGame extends FlameGame with TapCallbacks, HasCollisionDetection {
 
   void addEnemy() async {
     int randomDx = Random().nextInt(15) + 1;
-    int randomSpeed = Random().nextInt(6) + 1;
+    int randomSpeed = Random().nextInt(7) + 2;
     EnemyPlain enemy =
         EnemyPlain(position: Vector2(randomDx * 25, 25), speed: randomSpeed);
     add(enemy);
