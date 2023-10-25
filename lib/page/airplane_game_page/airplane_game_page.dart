@@ -4,6 +4,7 @@ import 'package:flame_practice/game/airplane_game/airplane_game.dart';
 import 'package:flame_practice/game/airplane_game/game_components/top_score_overlay_widget.dart';
 import 'package:flame_practice/game/slime_world/slime_game.dart';
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
 
 class AirplaneGamePage extends StatefulWidget {
   const AirplaneGamePage({super.key});
@@ -30,28 +31,45 @@ class _AirplaneGamePageState extends State<AirplaneGamePage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-        title: const Text("Airplane Game"),
-      ),
-      body: Center(
-        child: Stack(
-          children: [
-            GameWidget(game: _game),
-            Align(
-                alignment: Alignment.center,
-                child: CenterOverlayWidget(
-                  leftTap: _game.flyLeft,
-                  rightTap: _game.flyRight,
-                )),
-            Align(
-              alignment: Alignment.topCenter,
-              child: TopScoreOverlayWidget(
-                score: score,
-              ),
-            )
-          ],
+        backgroundColor: Colors.black12,
+        appBar: AppBar(
+          title: const Text("Airplane Game"),
         ),
-      ),
+        body: Center(
+          child: LayoutBuilder(
+            builder: (BuildContext, BoxConstraints) {
+              if (BoxConstraints.maxWidth > 500) {
+                return Center(
+                  child: SizedBox(
+                    width: 450,
+                    height: Get.height,
+                    child: newMethod(),
+                  ),
+                );
+              }
+              return newMethod();
+            },
+          ),
+        ));
+  }
+
+  Widget newMethod() {
+    return Stack(
+      children: [
+        GameWidget(game: _game),
+        Align(
+            alignment: Alignment.center,
+            child: CenterOverlayWidget(
+              leftTap: _game.flyLeft,
+              rightTap: _game.flyRight,
+            )),
+        Align(
+          alignment: Alignment.topCenter,
+          child: TopScoreOverlayWidget(
+            score: score,
+          ),
+        )
+      ],
     );
   }
 
