@@ -4,6 +4,8 @@ import 'package:flame/collisions.dart';
 import 'package:flame/components.dart';
 import 'package:flutter/material.dart';
 
+enum EnemyPlainState { flying, hit }
+
 class EnemyPlain extends SpriteComponent with HasGameRef, CollisionCallbacks {
   static const double enemySize = 50.0;
   final int speed;
@@ -11,10 +13,12 @@ class EnemyPlain extends SpriteComponent with HasGameRef, CollisionCallbacks {
       : super(size: Vector2.all(enemySize), position: position);
 
   late ShapeHitbox hitbox;
+  EnemyPlainState _state = EnemyPlainState.flying;
+  EnemyPlainState get state => _state;
 
   Future<Sprite> randomSprite() async {
-    int _type = Random().nextInt(4);
-    switch (_type) {
+    int type = Random().nextInt(4);
+    switch (type) {
       case 0:
         return await gameRef.loadSprite('airplane_game/enemies/enemy1-1.png');
       case 1:
@@ -46,7 +50,9 @@ class EnemyPlain extends SpriteComponent with HasGameRef, CollisionCallbacks {
 
   @override
   void update(double dt) {
-    position = Vector2(position.x, position.y + speed);
+    if (_state == EnemyPlainState.flying) {
+      position = Vector2(position.x, position.y + speed);
+    }
     super.update(dt);
   }
 
@@ -61,5 +67,10 @@ class EnemyPlain extends SpriteComponent with HasGameRef, CollisionCallbacks {
     } else {
       //...
     }
+  }
+
+  void stopPlane() {
+    _state = EnemyPlainState.hit;
+    Future.delayed(Duration(seconds: 1), (() => removeFromParent()));
   }
 }

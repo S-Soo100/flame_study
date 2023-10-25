@@ -1,11 +1,12 @@
 import 'package:flame/collisions.dart';
 import 'package:flame/components.dart';
-import 'package:flame/sprite.dart';
+import 'package:flame_practice/game/airplane_game/game_components/enemy_plane.dart';
 import 'package:flutter/material.dart';
 
 class PlayerPlane extends SpriteComponent with HasGameRef, CollisionCallbacks {
   static const double playerSize = 50.0;
-  PlayerPlane({required position})
+  final Function hitAction;
+  PlayerPlane({required position, required this.hitAction})
       : super(size: Vector2.all(playerSize), position: position);
 
   late ShapeHitbox hitbox;
@@ -34,21 +35,16 @@ class PlayerPlane extends SpriteComponent with HasGameRef, CollisionCallbacks {
   void onCollision(Set<Vector2> points, PositionComponent other) {
     super.onCollision(points, other);
     if (other is ScreenHitbox) {
-      print("Wall");
       if (position.x < size.x) {
-        print("Wall left");
-        // print("other position ${other.position.x}");
-        // print("slime position ${position.x}");
         position = Vector2(position.x + 3, position.y);
       } else {
-        print("Wall Right");
-        // print("other position ${other.position.x}");
-        // print("slime position ${position.x}");
         position = Vector2(position.x - 3, position.y);
       }
-      //...
-    } else {
-      //...
+    } else if (other is EnemyPlain) {
+      if (other.state == EnemyPlainState.flying) {
+        other.stopPlane();
+        hitAction();
+      }
     }
   }
 }

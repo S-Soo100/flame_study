@@ -15,9 +15,11 @@ class AirplaneGame extends FlameGame with TapCallbacks, HasCollisionDetection {
   late PlayerPlane _player;
   Function moveLeft;
   Function moveRight;
+  Function scoreUp;
   int _emenyCount = 0;
 
-  AirplaneGame({required this.moveLeft, required this.moveRight});
+  AirplaneGame(
+      {required this.moveLeft, required this.moveRight, required this.scoreUp});
 
   @override
   Color backgroundColor() => const Color(0xff434343);
@@ -26,13 +28,14 @@ class AirplaneGame extends FlameGame with TapCallbacks, HasCollisionDetection {
   Future<void> onLoad() async {
     add(ScreenHitbox());
     await add(_gameBg);
-    _player = PlayerPlane(position: Vector2(size.x / 2 - 25, size.y - 80));
+    _player = PlayerPlane(
+        position: Vector2(size.x / 2 - 25, size.y - 80), hitAction: hitAction);
     await add(_player);
 
-    _timer = Timer.periodic(const Duration(seconds: 2), (timer) {
+    _timer = Timer.periodic(const Duration(milliseconds: 2200), (timer) {
       addEnemy();
     });
-    _timer2 = Timer.periodic(const Duration(seconds: 3), (timer) {
+    _timer2 = Timer.periodic(const Duration(milliseconds: 2800), (timer) {
       addEnemy();
     });
   }
@@ -49,8 +52,6 @@ class AirplaneGame extends FlameGame with TapCallbacks, HasCollisionDetection {
   }
 
   void addEnemy() async {
-    print("ADD ENEMNY");
-    print("${_emenyCount}");
     int randomDx = Random().nextInt(15) + 1;
     int randomSpeed = Random().nextInt(6) + 1;
     EnemyPlain enemy =
@@ -60,11 +61,15 @@ class AirplaneGame extends FlameGame with TapCallbacks, HasCollisionDetection {
 
   void flyLeft() {
     moveLeft();
-    _player.position = Vector2(_player.position.x - 14, _player.position.y);
+    _player.position = Vector2(_player.position.x - 17, _player.position.y);
   }
 
   void flyRight() {
     moveRight();
-    _player.position = Vector2(_player.position.x + 14, _player.position.y);
+    _player.position = Vector2(_player.position.x + 17, _player.position.y);
+  }
+
+  void hitAction() {
+    scoreUp();
   }
 }

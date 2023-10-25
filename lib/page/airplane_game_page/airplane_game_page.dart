@@ -1,6 +1,7 @@
 import 'package:flame/game.dart';
-import 'package:flame_practice/game/airplane_game/game_components/airplane_center_overlay_widget.dart';
+import 'package:flame_practice/game/airplane_game/game_components/center_overlay_widget.dart';
 import 'package:flame_practice/game/airplane_game/airplane_game.dart';
+import 'package:flame_practice/game/airplane_game/game_components/top_score_overlay_widget.dart';
 import 'package:flame_practice/game/slime_world/slime_game.dart';
 import 'package:flutter/material.dart';
 
@@ -13,11 +14,12 @@ class AirplaneGamePage extends StatefulWidget {
 
 class _AirplaneGamePageState extends State<AirplaneGamePage> {
   late AirplaneGame _game;
+  int score = 0;
 
   @override
   void initState() {
     super.initState();
-    _game = AirplaneGame(moveLeft: _, moveRight: _);
+    _game = AirplaneGame(moveLeft: fasd, moveRight: fasd, scoreUp: upScore);
   }
 
   @override
@@ -38,17 +40,29 @@ class _AirplaneGamePageState extends State<AirplaneGamePage> {
             GameWidget(game: _game),
             Align(
                 alignment: Alignment.center,
-                child: AirplaneCenterOverlayWidget(
+                child: CenterOverlayWidget(
                   leftTap: _game.flyLeft,
                   rightTap: _game.flyRight,
-                ))
+                )),
+            Align(
+              alignment: Alignment.topCenter,
+              child: TopScoreOverlayWidget(
+                score: score,
+              ),
+            )
           ],
         ),
       ),
     );
   }
 
-  void _() {
+  void upScore() {
+    setState(() {
+      score++;
+    });
+  }
+
+  void fasd() {
     print("tap tap tap ");
   }
 }

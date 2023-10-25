@@ -1,21 +1,18 @@
 import 'dart:async';
-
 import 'package:flutter/material.dart';
 
-class AirplaneCenterOverlayWidget extends StatefulWidget {
+class CenterOverlayWidget extends StatefulWidget {
   Function leftTap;
   Function rightTap;
 
-  AirplaneCenterOverlayWidget(
+  CenterOverlayWidget(
       {super.key, required this.leftTap, required this.rightTap});
 
   @override
-  State<AirplaneCenterOverlayWidget> createState() =>
-      _AirplaneCenterOverlayWidgetState();
+  State<CenterOverlayWidget> createState() => _CenterOverlayWidgetState();
 }
 
-class _AirplaneCenterOverlayWidgetState
-    extends State<AirplaneCenterOverlayWidget> {
+class _CenterOverlayWidgetState extends State<CenterOverlayWidget> {
   Color _left = Colors.white.withOpacity(0.5);
   Color _right = Colors.white.withOpacity(0.5);
   late Timer? _timer;
