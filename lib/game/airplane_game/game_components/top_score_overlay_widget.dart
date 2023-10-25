@@ -8,9 +8,6 @@ class TopScoreOverlayWidget extends StatelessWidget {
   int score;
   String _score() {
     String scoreText = score.toString();
-    if (kDebugMode) {
-      print("Score length = ${scoreText.length}");
-    }
     switch (scoreText.length) {
       case 0:
         return "0000";

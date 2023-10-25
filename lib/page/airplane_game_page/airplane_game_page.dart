@@ -20,8 +20,8 @@ class _AirplaneGamePageState extends State<AirplaneGamePage> {
   late AirplaneGame _game;
   late AirplaneGameController _controller = Get.find<AirplaneGameController>();
 
-  Timer? _timer;
-  double _w = 0;
+  Timer? readyTimer;
+  int readyCount = 3;
 
   @override
   void initState() {
@@ -76,6 +76,7 @@ class _AirplaneGamePageState extends State<AirplaneGamePage> {
         return Center(
           child: GestureDetector(
             onTap: () {
+              getReady();
               _controller.gameStart();
             },
             child: Padding(
@@ -207,11 +208,14 @@ class _AirplaneGamePageState extends State<AirplaneGamePage> {
   }
 
   void getReady() {
-    _timer = Timer.periodic(Duration(milliseconds: 100), (timer) {
-      _w = _w + 10;
-      if (_w > 179) {
-        _w = 180;
-        _timer?.cancel();
+    readyTimer = Timer.periodic(Duration(milliseconds: 1000), (timer) {
+      setState(() {
+        readyCount--;
+      });
+      print("readyCount is ${readyCount}");
+      if (readyCount < 0) {
+        readyTimer?.cancel();
+        readyCount = 3;
       }
     });
   }
@@ -223,15 +227,18 @@ class _AirplaneGamePageState extends State<AirplaneGamePage> {
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
-            Container(
-              alignment: Alignment.centerLeft,
-              width: 80,
-              height: 30,
-              child: AnimatedContainer(
-                duration: const Duration(milliseconds: 100),
-                width: _w,
-                height: 30,
-                color: Colors.amber[900],
+            Row(),
+            AnimatedContainer(
+              duration: const Duration(milliseconds: 100),
+              width: 200,
+              height: 200,
+              alignment: Alignment.center,
+              child: Text(
+                "${readyCount.toString()}",
+                style: const TextStyle(
+                    color: Colors.white,
+                    fontWeight: FontWeight.bold,
+                    fontSize: 80),
               ),
             ),
           ],
