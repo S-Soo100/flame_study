@@ -16,7 +16,6 @@ class AirplaneGame extends FlameGame with TapCallbacks, HasCollisionDetection {
   Function moveLeft;
   Function moveRight;
   Function scoreUp;
-  int _emenyCount = 0;
 
   AirplaneGame(
       {required this.moveLeft, required this.moveRight, required this.scoreUp});
@@ -29,7 +28,7 @@ class AirplaneGame extends FlameGame with TapCallbacks, HasCollisionDetection {
     add(ScreenHitbox());
     await add(_gameBg);
     _player = PlayerPlane(
-        position: Vector2(size.x / 2 - 25, size.y - 80), hitAction: hitAction);
+        position: Vector2(size.x / 2 - 30, size.y - 100), hitAction: hitAction);
     await add(_player);
 
     _timer = Timer.periodic(const Duration(milliseconds: 2200), (timer) {
@@ -52,10 +51,12 @@ class AirplaneGame extends FlameGame with TapCallbacks, HasCollisionDetection {
   }
 
   void addEnemy() async {
-    int randomDx = Random().nextInt(15) + 1;
+    int randomDx = Random().nextInt(13) + 1;
     int randomSpeed = Random().nextInt(7) + 2;
-    EnemyPlain enemy =
-        EnemyPlain(position: Vector2(randomDx * 25, 25), speed: randomSpeed);
+    EnemyPlain enemy = EnemyPlain(
+        position: Vector2(randomDx * 30, 30),
+        speed: randomSpeed,
+        upScore: scoreUp);
     add(enemy);
   }
 
@@ -70,6 +71,6 @@ class AirplaneGame extends FlameGame with TapCallbacks, HasCollisionDetection {
   }
 
   void hitAction() {
-    scoreUp();
+    // scoreUp();
   }
 }

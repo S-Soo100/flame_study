@@ -4,7 +4,7 @@ import 'package:flame_practice/game/airplane_game/game_components/enemy_plane.da
 import 'package:flutter/material.dart';
 
 class PlayerPlane extends SpriteComponent with HasGameRef, CollisionCallbacks {
-  static const double playerSize = 50.0;
+  static const double playerSize = 60.0;
   final Function hitAction;
   PlayerPlane({required position, required this.hitAction})
       : super(size: Vector2.all(playerSize), position: position);

@@ -7,45 +7,33 @@ import 'package:flutter/material.dart';
 enum EnemyPlainState { flying, hit }
 
 class EnemyPlain extends SpriteComponent with HasGameRef, CollisionCallbacks {
-  static const double enemySize = 50.0;
+  static const double enemySize = 60.0;
   final int speed;
-  EnemyPlain({required position, required this.speed})
+  final Function upScore;
+  EnemyPlain({required position, required this.speed, required this.upScore})
       : super(size: Vector2.all(enemySize), position: position);
 
   late ShapeHitbox hitbox;
   EnemyPlainState _state = EnemyPlainState.flying;
   EnemyPlainState get state => _state;
   late String planeType;
-
+  late int planeScore;
   late Sprite? _spirte;
-
-  // Future<Sprite> randomSprite() async {
-  //   int type = Random().nextInt(4);
-  //   switch (type) {
-  //     case 0:
-  //       return await gameRef.loadSprite('airplane_game/enemies/enemy1-1.png');
-  //     case 1:
-  //       return await gameRef.loadSprite('airplane_game/enemies/enemy2-1.png');
-  //     case 2:
-  //       return await gameRef.loadSprite('airplane_game/enemies/enemy3-1.png');
-  //     case 3:
-  //       return await gameRef
-  //           .loadSprite('airplane_game/choppers/chopper2-2.png');
-  //     default:
-  //       return await gameRef.loadSprite('airplane_game/enemies/enemy3-1.png');
-  //   }
-  // }
 
   String initRandomType() {
     int type = Random().nextInt(4);
     switch (type) {
       case 0:
+        planeScore = 20;
         return 'airplane_game/enemies/enemy1-1.png';
       case 1:
+        planeScore = 100;
         return 'airplane_game/enemies/enemy2-1.png';
       case 2:
+        planeScore = 50;
         return 'airplane_game/enemies/enemy3-1.png';
       case 3:
+        planeScore = 30;
         return 'airplane_game/choppers/chopper2-2.png';
       default:
         return 'airplane_game/enemies/enemy3-1.png';
@@ -81,8 +69,12 @@ class EnemyPlain extends SpriteComponent with HasGameRef, CollisionCallbacks {
   void onCollision(Set<Vector2> points, PositionComponent other) {
     super.onCollision(points, other);
     if (other is ScreenHitbox) {
+      if (position.x > game.size.x) {
+        position = Vector2(game.size.x - 60, position.y);
+      }
       if (position.y < game.size.y) {
         removeFromParent();
+        upScore();
       } else {}
       //...
     } else {
@@ -96,7 +88,8 @@ class EnemyPlain extends SpriteComponent with HasGameRef, CollisionCallbacks {
     _spirte = await gameRef.loadSprite(planeType);
     bool blink = false;
     sprite = null;
-    destroyTimer = ASYNC.Timer.periodic(Duration(milliseconds: 50), (timer) {
+    destroyTimer =
+        ASYNC.Timer.periodic(const Duration(milliseconds: 50), (timer) {
       if (blink == true) {
         sprite = null;
         blink = false;
@@ -110,6 +103,6 @@ class EnemyPlain extends SpriteComponent with HasGameRef, CollisionCallbacks {
   void stopPlane() {
     _state = EnemyPlainState.hit;
     destroy();
-    Future.delayed(Duration(seconds: 1), (() => removeFromParent()));
+    Future.delayed(const Duration(seconds: 1), (() => removeFromParent()));
   }
 }

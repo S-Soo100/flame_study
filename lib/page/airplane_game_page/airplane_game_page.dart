@@ -24,7 +24,6 @@ class _AirplaneGamePageState extends State<AirplaneGamePage> {
 
   @override
   void dispose() {
-    // TODO: implement dispose
     super.dispose();
   }
 
@@ -58,7 +57,7 @@ class _AirplaneGamePageState extends State<AirplaneGamePage> {
 
   void upScore() {
     setState(() {
-      score++;
+      score = score + 10;
     });
   }
 
