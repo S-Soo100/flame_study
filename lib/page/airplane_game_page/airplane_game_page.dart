@@ -17,7 +17,7 @@ class AirplaneGamePage extends StatefulWidget {
 }
 
 class _AirplaneGamePageState extends State<AirplaneGamePage> {
-  late AirplaneGame _game;
+  // late AirplaneGame _game;
   late AirplaneGameController _controller = Get.find<AirplaneGameController>();
 
   Timer? readyTimer;
@@ -26,12 +26,13 @@ class _AirplaneGamePageState extends State<AirplaneGamePage> {
   @override
   void initState() {
     super.initState();
+    _controller.setNewGame();
     _controller = Get.find<AirplaneGameController>();
-    _game = AirplaneGame(moveLeft: fasd, moveRight: fasd);
+    // _game = AirplaneGame();
   }
 
   AirplaneGame instance() {
-    return AirplaneGame(moveLeft: fasd, moveRight: fasd);
+    return AirplaneGame();
   }
 
   @override
@@ -91,13 +92,13 @@ class _AirplaneGamePageState extends State<AirplaneGamePage> {
       }
       return Stack(
         children: [
-          GameWidget(game: _game),
+          GameWidget(game: _controller.game),
           if (state is Playing)
             Align(
                 alignment: Alignment.center,
                 child: CenterOverlayWidget(
-                  leftTap: _game.flyLeft,
-                  rightTap: _game.flyRight,
+                  leftTap: _controller.game.flyLeft,
+                  rightTap: _controller.game.flyRight,
                 )),
           Align(
             alignment: Alignment.topCenter,
@@ -154,8 +155,8 @@ class _AirplaneGamePageState extends State<AirplaneGamePage> {
                   padding: const EdgeInsets.symmetric(horizontal: 8),
                   child: GestureDetector(
                     onTap: () {
+                      getReady();
                       _controller.tryAgain();
-                      _game = AirplaneGame(moveLeft: fasd, moveRight: fasd);
                     },
                     child: Container(
                       width: 120,

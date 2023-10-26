@@ -73,13 +73,18 @@ class EnemyPlain extends SpriteComponent with HasGameRef, CollisionCallbacks {
     super.onCollision(points, other);
     if (other is ScreenHitbox) {
       if (position.x > game.size.x) {
-        position = Vector2(game.size.x - 60, position.y);
+        if (position.x < size.x) {
+          position = Vector2(0, position.y);
+          return;
+        } else {
+          position = Vector2(game.size.x - (size.x), position.y);
+          return;
+        }
       }
-      if (position.y < game.size.y) {
+      if (position.y + size.y > game.size.y) {
         removeFromParent();
         _controller.upScore(planeScore);
-      } else {}
-      //...
+      }
     } else {
       //...
     }

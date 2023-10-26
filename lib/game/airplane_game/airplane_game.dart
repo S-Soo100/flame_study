@@ -6,7 +6,6 @@ import 'package:flame/game.dart';
 import 'package:flame_practice/core/state/game_state.dart';
 import 'package:flame_practice/game/airplane_game/airplane_game_controller.dart';
 import 'package:flame_practice/game/airplane_game/game_components/airplane_game_bg.dart';
-import 'package:flame_practice/game/airplane_game/game_components/enemy_plane.dart';
 import 'package:flame_practice/game/airplane_game/game_components/player_plane.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
@@ -17,10 +16,8 @@ class AirplaneGame extends FlameGame with TapCallbacks, HasCollisionDetection {
   late Timer? _timer;
   late Timer? _timer2;
   late PlayerPlane _player;
-  Function moveLeft;
-  Function moveRight;
 
-  AirplaneGame({required this.moveLeft, required this.moveRight});
+  AirplaneGame();
 
   @override
   Color backgroundColor() => const Color(0xff434343);
@@ -63,12 +60,10 @@ class AirplaneGame extends FlameGame with TapCallbacks, HasCollisionDetection {
   }
 
   void flyLeft() {
-    moveLeft();
     _player.position = Vector2(_player.position.x - 17, _player.position.y);
   }
 
   void flyRight() {
-    moveRight();
     _player.position = Vector2(_player.position.x + 17, _player.position.y);
   }
 

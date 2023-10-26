@@ -3,6 +3,7 @@ import 'dart:math';
 
 import 'package:flame/game.dart';
 import 'package:flame_practice/core/state/game_state.dart';
+import 'package:flame_practice/game/airplane_game/airplane_game.dart';
 import 'package:flame_practice/game/airplane_game/game_components/enemy_plane.dart';
 import 'package:get/get.dart';
 
@@ -15,6 +16,17 @@ class AirplaneGameController extends GetxController {
   int get score => _score.value;
   Rx<int> _hitPoint = Rx(5);
   int get hitPoint => _hitPoint.value;
+
+  late AirplaneGame _game;
+  AirplaneGame get game => _game;
+
+  AirplaneGame newGameInstance() {
+    return AirplaneGame();
+  }
+
+  void setNewGame() {
+    _game = newGameInstance();
+  }
 
   @override
   void onInit() {
@@ -63,6 +75,7 @@ class AirplaneGameController extends GetxController {
   }
 
   void tryAgain() {
+    setNewGame();
     gameStart();
   }
 }
