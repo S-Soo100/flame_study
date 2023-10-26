@@ -77,7 +77,7 @@ class EnemyPlain extends SpriteComponent with HasGameRef, CollisionCallbacks {
           position = Vector2(0, position.y);
           return;
         } else {
-          position = Vector2(game.size.x - (size.x), position.y);
+          position = Vector2(game.size.x - size.x, position.y);
           return;
         }
       }
