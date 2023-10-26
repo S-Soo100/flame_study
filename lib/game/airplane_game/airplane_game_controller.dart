@@ -10,11 +10,11 @@ import 'package:get/get.dart';
 class AirplaneGameController extends GetxController {
   // late Timer? _timer;
   // late Timer? _timer2;
-  Rx<GameState> _state = Rx(Init());
+  final Rx<GameState> _state = Rx(Init());
   GameState get state => _state.value;
-  Rx<int> _score = Rx(0);
+  final Rx<int> _score = Rx(0);
   int get score => _score.value;
-  Rx<int> _hitPoint = Rx(5);
+  final Rx<int> _hitPoint = Rx(5);
   int get hitPoint => _hitPoint.value;
 
   late AirplaneGame _game;
