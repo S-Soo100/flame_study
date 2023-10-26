@@ -75,18 +75,49 @@ class _AirplaneGamePageState extends State<AirplaneGamePage> {
       GameState state = _controller.state;
       if (state is Init) {
         return Center(
-          child: GestureDetector(
-            onTap: () {
-              getReady();
-              _controller.gameStart();
-            },
-            child: Padding(
-              padding: const EdgeInsets.all(8.0),
-              child: Container(
-                  color: Colors.amber,
-                  padding: const EdgeInsets.all(20),
-                  child: const Text("Ready")),
-            ),
+          child: Column(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: <Widget>[
+              const Text(
+                "Airplane Game",
+                style: TextStyle(
+                    fontSize: 40,
+                    fontWeight: FontWeight.bold,
+                    color: Colors.white),
+              ),
+              ClipRect(
+                child: Container(
+                  width: 200,
+                  height: 200,
+                  decoration: const BoxDecoration(
+                      image: DecorationImage(
+                          alignment: Alignment(0, 0),
+                          fit: BoxFit.cover,
+                          image: AssetImage(
+                              "assets/images/airplane_game/player1.png"))),
+                ),
+              ),
+              Padding(
+                padding: const EdgeInsets.all(32.0),
+                child: ElevatedButton(
+                  onPressed: () {
+                    getReady();
+                    _controller.gameStart();
+                  },
+                  style: ElevatedButton.styleFrom(
+                    backgroundColor: Colors.redAccent,
+                    textStyle: const TextStyle(fontSize: 24),
+                    padding: const EdgeInsets.symmetric(
+                        horizontal: 30, vertical: 10),
+                  ),
+                  child: const Text(
+                    "Start Game",
+                    style: TextStyle(
+                        fontWeight: FontWeight.bold, color: Colors.white),
+                  ),
+                ),
+              ),
+            ],
           ),
         );
       }
@@ -209,7 +240,7 @@ class _AirplaneGamePageState extends State<AirplaneGamePage> {
   }
 
   void getReady() {
-    readyTimer = Timer.periodic(Duration(milliseconds: 1000), (timer) {
+    readyTimer = Timer.periodic(const Duration(milliseconds: 1000), (timer) {
       setState(() {
         readyCount--;
       });
