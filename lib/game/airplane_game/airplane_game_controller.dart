@@ -39,7 +39,9 @@ class AirplaneGameController extends GetxController {
   }
 
   void upScore(int score) {
-    _score.value = _score.value + score;
+    if (state is Playing) {
+      _score.value = _score.value + score;
+    }
   }
 
   void gameStart() {
@@ -58,14 +60,18 @@ class AirplaneGameController extends GetxController {
   }
 
   void hit() {
-    _hitPoint.value--;
-    if (hitPoint == 0) {
-      gameOver();
+    if (state is Playing) {
+      _hitPoint.value--;
+      if (hitPoint == 0) {
+        gameOver();
+      }
     }
   }
 
   void gameOver() {
-    _state.value = GameOver();
+    if (state is Playing) {
+      _state.value = GameOver();
+    }
   }
 
   EnemyPlain addRandomEnemy() {

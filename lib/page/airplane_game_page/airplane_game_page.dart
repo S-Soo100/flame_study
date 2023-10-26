@@ -4,7 +4,6 @@ import 'package:flame/game.dart';
 import 'package:flame_practice/core/state/game_state.dart';
 import 'package:flame_practice/game/airplane_game/airplane_game_controller.dart';
 import 'package:flame_practice/game/airplane_game/game_components/center_overlay_widget.dart';
-import 'package:flame_practice/game/airplane_game/airplane_game.dart';
 import 'package:flame_practice/game/airplane_game/game_components/top_score_overlay_widget.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
@@ -26,13 +25,9 @@ class _AirplaneGamePageState extends State<AirplaneGamePage> {
   @override
   void initState() {
     super.initState();
-    _controller.setNewGame();
-    _controller = Get.find<AirplaneGameController>();
     // _game = AirplaneGame();
-  }
-
-  AirplaneGame instance() {
-    return AirplaneGame();
+    _controller = Get.find<AirplaneGameController>();
+    _controller.setNewGame();
   }
 
   @override
@@ -92,7 +87,7 @@ class _AirplaneGamePageState extends State<AirplaneGamePage> {
                   decoration: const BoxDecoration(
                       image: DecorationImage(
                           alignment: Alignment(0, 0),
-                          fit: BoxFit.cover,
+                          fit: BoxFit.contain,
                           image: AssetImage(
                               "assets/images/airplane_game/player1.png"))),
                 ),
