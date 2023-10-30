@@ -35,10 +35,14 @@ class PlayerPlane extends SpriteComponent with HasGameRef, CollisionCallbacks {
   void onCollision(Set<Vector2> points, PositionComponent other) {
     super.onCollision(points, other);
     if (other is ScreenHitbox) {
-      if (position.x < size.x) {
-        position = Vector2(position.x + 3, position.y);
-      } else {
-        position = Vector2(position.x - 3, position.y);
+      if (position.x < game.size.x) {
+        if (position.x < size.x) {
+          position = Vector2(0, position.y);
+          // return;
+        } else {
+          position = Vector2(game.size.x - size.x, position.y);
+          // return;
+        }
       }
     } else if (other is EnemyPlain) {
       if (other.state == EnemyPlainState.flying) {

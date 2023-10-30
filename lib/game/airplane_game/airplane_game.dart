@@ -30,7 +30,8 @@ class AirplaneGame extends FlameGame with TapCallbacks, HasCollisionDetection {
     _player = PlayerPlane(
         position: Vector2(size.x / 2 - 30, size.y - 100), hitAction: hitAction);
     await add(_player);
-
+    // overlays.add("topHpScoreWidget");
+    // overlays.add("centerOverlayWidget");
     _timer = Timer.periodic(const Duration(milliseconds: 2200), (timer) {
       if (_controller.state is Playing) {
         addEnemy();

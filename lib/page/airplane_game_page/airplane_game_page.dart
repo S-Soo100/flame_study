@@ -118,7 +118,31 @@ class _AirplaneGamePageState extends State<AirplaneGamePage> {
       }
       return Stack(
         children: [
-          GameWidget(game: _controller.game),
+          GameWidget(
+            game: _controller.game,
+            // overlayBuilderMap: {
+            //   'topHpScoreWidget': (context, game) {
+            //     return Column(
+            //       children: [
+            //         Align(
+            //           alignment: Alignment.center,
+            //           child: TopScoreOverlayWidget(
+            //               hitPoint: _controller.hitPoint,
+            //               score: _controller.score),
+            //         ),
+            //       ],
+            //     );
+            //   },
+            //   'centerOverlayWidget': (context, game) {
+            //     return Align(
+            //         alignment: Alignment.center,
+            //         child: CenterOverlayWidget(
+            //           leftTap: _controller.game.flyLeft,
+            //           rightTap: _controller.game.flyRight,
+            //         ));
+            //   }
+            // },
+          ),
           if (state is Playing)
             Align(
                 alignment: Alignment.center,
@@ -239,7 +263,7 @@ class _AirplaneGamePageState extends State<AirplaneGamePage> {
       setState(() {
         readyCount--;
       });
-      print("readyCount is ${readyCount}");
+      // print("readyCount is ${readyCount}");
       if (readyCount < 0) {
         readyTimer?.cancel();
         readyCount = 3;
