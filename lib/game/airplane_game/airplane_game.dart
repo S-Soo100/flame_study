@@ -12,6 +12,7 @@ import 'package:get/get.dart';
 
 class AirplaneGame extends FlameGame with TapCallbacks, HasCollisionDetection {
   final AirplaneGameBg _gameBg = AirplaneGameBg();
+  final AirplaneGameBg _gameBgSecond = AirplaneGameBg();
   late AirplaneGameController _controller;
   late Timer? _timer;
   late Timer? _timer2;
@@ -20,18 +21,18 @@ class AirplaneGame extends FlameGame with TapCallbacks, HasCollisionDetection {
   AirplaneGame();
 
   @override
-  Color backgroundColor() => const Color(0xff434343);
+  Color backgroundColor() => const Color(0xffE8C274);
 
   @override
   Future<void> onLoad() async {
     _controller = Get.find<AirplaneGameController>();
     add(ScreenHitbox());
     await add(_gameBg);
+    _gameBgSecond.position = Vector2(0, -size.y);
+    await add(_gameBgSecond);
     _player = PlayerPlane(
         position: Vector2(size.x / 2 - 30, size.y - 100), hitAction: hitAction);
     await add(_player);
-    // overlays.add("topHpScoreWidget");
-    // overlays.add("centerOverlayWidget");
     _timer = Timer.periodic(const Duration(milliseconds: 2200), (timer) {
       if (_controller.state is Playing) {
         addEnemy();
@@ -57,7 +58,7 @@ class AirplaneGame extends FlameGame with TapCallbacks, HasCollisionDetection {
   }
 
   void addEnemy() async {
-    add(_controller.addRandomEnemy());
+    add(_controller.addRandomEnemy(size.x));
   }
 
   void flyLeft() {

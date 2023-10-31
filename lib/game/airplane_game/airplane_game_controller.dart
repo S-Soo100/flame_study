@@ -74,10 +74,11 @@ class AirplaneGameController extends GetxController {
     }
   }
 
-  EnemyPlain addRandomEnemy() {
-    int randomDx = Random().nextInt(13) + 1;
-    int randomSpeed = Random().nextInt(7) + 2;
-    return EnemyPlain(position: Vector2(randomDx * 30, 30), speed: randomSpeed);
+  EnemyPlain addRandomEnemy(double sizex) {
+    int randomDx = Random().nextInt(sizex ~/ 30) + 1;
+    int randomSpeed = Random().nextInt(7) + 3;
+    return EnemyPlain(
+        position: Vector2(randomDx * 30, -60), speed: randomSpeed);
   }
 
   void tryAgain() {

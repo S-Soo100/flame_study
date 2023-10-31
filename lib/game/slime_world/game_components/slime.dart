@@ -1,6 +1,7 @@
 import 'package:flame/collisions.dart';
 import 'package:flame/components.dart';
 import 'package:flame/sprite.dart';
+import 'package:flame_practice/game/airplane_game/game_components/player_plane.dart';
 import 'package:flutter/material.dart';
 
 class Slime extends SpriteAnimationComponent
@@ -27,7 +28,7 @@ class Slime extends SpriteAnimationComponent
       ..paint = defaultPaint
       ..renderShape = true;
     add(hitbox);
-
+    // add(Slime(type: 0, position: position));
     await _loadAnimations();
     animation = _standingAnimation;
   }
@@ -51,7 +52,7 @@ class Slime extends SpriteAnimationComponent
   void update(double dt) {
     // TODO: implement update
     super.update(dt);
-    if (!hitbox.isColliding && position.y < 500) {
+    if (!hitbox.isColliding && position.y < gameRef.size.y - 200) {
       position.y = position.y + 1;
     }
   }
