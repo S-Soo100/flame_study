@@ -32,6 +32,13 @@ class _AirplaneGameDebugPageState extends State<AirplaneGameDebugPage> {
   }
 
   @override
+  void dispose() {
+    // TODO: implement dispose
+    _controller.disposeAll();
+    super.dispose();
+  }
+
+  @override
   Widget build(BuildContext context) {
     return Scaffold(
         backgroundColor: Colors.black12,

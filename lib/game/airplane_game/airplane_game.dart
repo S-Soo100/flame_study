@@ -39,16 +39,15 @@ class AirplaneGame extends FlameGame with TapCallbacks, HasCollisionDetection {
     await add(_player);
     _timer = Timer.periodic(const Duration(milliseconds: 2200), (timer) {
       if (_controller.state is Playing) {
-        addEnemy();
+        // addEnemy();
       }
     });
     _timer2 = Timer.periodic(const Duration(milliseconds: 2800), (timer) {
       if (_controller.state is Playing) {
-        addEnemy();
+        // addEnemy();
       }
     });
-    sidePlainTimer =
-        Timer.periodic(const Duration(milliseconds: 2500), (timer) {
+    sidePlainTimer = Timer.periodic(const Duration(milliseconds: 600), (timer) {
       if (_controller.state is Playing) {
         addSideEmeny();
       }
@@ -59,6 +58,7 @@ class AirplaneGame extends FlameGame with TapCallbacks, HasCollisionDetection {
   void onRemove() {
     _timer?.cancel();
     _timer2?.cancel();
+    sidePlainTimer?.cancel();
     super.onRemove();
   }
 
@@ -73,6 +73,7 @@ class AirplaneGame extends FlameGame with TapCallbacks, HasCollisionDetection {
 
   void addSideEmeny() async {
     SideEnemyPlain plane = _controller.addRandomSideEmenyPlain(size.x, size.y);
+    // plane.position = Vector2(plane.position.x, -60);
     await add(plane);
   }
 
@@ -86,5 +87,11 @@ class AirplaneGame extends FlameGame with TapCallbacks, HasCollisionDetection {
 
   void hitAction() {
     _controller.hit();
+  }
+
+  void timerOut() {
+    _timer?.cancel();
+    _timer2?.cancel();
+    sidePlainTimer?.cancel();
   }
 }

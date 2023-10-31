@@ -34,16 +34,28 @@ class SideEnemyPlain extends EnemyPlain {
     // super.update(dt);
     if (_state == EnemyPlainState.flying) {
       if (type == sideEnemyPlainType.left) {
-        position = Vector2(position.x + speed / 3, position.y + speed);
+        position = Vector2(position.x + (speed / 1.2), position.y + speed);
       } else {
-        position = Vector2(position.x - speed / 3, position.y + speed);
+        position = Vector2(position.x - (speed / 1.2), position.y + speed);
       }
+    }
+
+    if (type == sideEnemyPlainType.left && position.x > gameRef.size.x) {
+      print('side left');
+      removeFromParent();
+      _controller.upScore(planeScore);
+      return;
+    } else if (type == sideEnemyPlainType.right && position.x < 0) {
+      print('side right');
+      removeFromParent();
+      _controller.upScore(planeScore);
+      return;
     }
   }
 
   @override
   void onCollision(Set<Vector2> points, PositionComponent other) {
-    super.onCollision(points, other);
+    // super.onCollision(points, other);
     if (other is ScreenHitbox) {
       // ...
     } else {
