@@ -116,6 +116,7 @@ class AirplaneGameController extends GetxController {
     _hitPoint.value = 5;
     _state.value = Init();
     setNewGame();
+    disposeAll();
   }
 
   void disposeAll() {
