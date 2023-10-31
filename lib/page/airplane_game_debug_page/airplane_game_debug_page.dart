@@ -34,7 +34,7 @@ class _AirplaneGameDebugPageState extends State<AirplaneGameDebugPage> {
   @override
   void dispose() {
     // TODO: implement dispose
-    _controller.disposeAll();
+    _controller.debugGameEnd();
     super.dispose();
   }
 

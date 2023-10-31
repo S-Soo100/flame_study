@@ -111,6 +111,13 @@ class AirplaneGameController extends GetxController {
     _hitPoint.value = -1;
   }
 
+  void debugGameEnd() {
+    _score.value = 0;
+    _hitPoint.value = 5;
+    _state.value = Init();
+    setNewGame();
+  }
+
   void disposeAll() {
     kDebugMode ? print("dispose all timers") : null;
     _game.timerOut();
