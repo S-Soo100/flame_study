@@ -16,7 +16,7 @@ class AirplaneGame extends FlameGame with TapCallbacks, HasCollisionDetection {
   late AirplaneGameController _controller;
   late Timer? _timer;
   late Timer? _timer2;
-  late Timer? sidePlainTimer;
+  late Timer? _sidePlainTimer;
   late PlayerPlane _player;
   int difficulty;
   int firstTimerDuration = 2200;
@@ -31,28 +31,29 @@ class AirplaneGame extends FlameGame with TapCallbacks, HasCollisionDetection {
   @override
   Future<void> onLoad() async {
     _controller = Get.find<AirplaneGameController>();
+
     add(ScreenHitbox());
+
     await add(_gameBg);
     _gameBgSecond.position = Vector2(0, -size.y);
     await add(_gameBgSecond);
+
     _player = PlayerPlane(
         position: Vector2(size.x / 2 - 30, size.y - 100), hitAction: hitAction);
     await add(_player);
-    setTimerDurationByDifficulty();
-    startEnemyAddTimers();
+
+    _setTimerDurationByDifficulty();
+    _startEnemyAddTimers();
   }
 
-  void setTimerDurationByDifficulty() {
+  void _setTimerDurationByDifficulty() {
     int diff = 2 - difficulty;
-    print("diff: " + diff.toString());
     firstTimerDuration = (diff * 1000) + 1100;
     secondTimerDuration = (diff * 1000) + 1700;
     sideTimerDuration = (diff * 1000) + 2600;
-    print(
-        "diff = $diff, $firstTimerDuration, $secondTimerDuration, $sideTimerDuration");
   }
 
-  void startEnemyAddTimers() {
+  void _startEnemyAddTimers() {
     _timer =
         Timer.periodic(Duration(milliseconds: firstTimerDuration), (timer) {
       if (_controller.state is Playing) {
@@ -65,7 +66,7 @@ class AirplaneGame extends FlameGame with TapCallbacks, HasCollisionDetection {
         addEnemy();
       }
     });
-    sidePlainTimer =
+    _sidePlainTimer =
         Timer.periodic(Duration(milliseconds: sideTimerDuration), (timer) {
       if (_controller.state is Playing) {
         addSideEmeny();
@@ -77,7 +78,7 @@ class AirplaneGame extends FlameGame with TapCallbacks, HasCollisionDetection {
   void onRemove() {
     _timer?.cancel();
     _timer2?.cancel();
-    sidePlainTimer?.cancel();
+    _sidePlainTimer?.cancel();
     super.onRemove();
   }
 
@@ -111,6 +112,6 @@ class AirplaneGame extends FlameGame with TapCallbacks, HasCollisionDetection {
   void timerOut() {
     _timer?.cancel();
     _timer2?.cancel();
-    sidePlainTimer?.cancel();
+    _sidePlainTimer?.cancel();
   }
 }
