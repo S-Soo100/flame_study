@@ -39,15 +39,16 @@ class AirplaneGame extends FlameGame with TapCallbacks, HasCollisionDetection {
     await add(_player);
     _timer = Timer.periodic(const Duration(milliseconds: 2200), (timer) {
       if (_controller.state is Playing) {
-        // addEnemy();
+        addEnemy();
       }
     });
     _timer2 = Timer.periodic(const Duration(milliseconds: 2800), (timer) {
       if (_controller.state is Playing) {
-        // addEnemy();
+        addEnemy();
       }
     });
-    sidePlainTimer = Timer.periodic(const Duration(milliseconds: 600), (timer) {
+    sidePlainTimer =
+        Timer.periodic(const Duration(milliseconds: 4600), (timer) {
       if (_controller.state is Playing) {
         addSideEmeny();
       }
