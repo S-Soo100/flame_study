@@ -68,11 +68,16 @@ class _AirplaneGamePageState extends State<AirplaneGamePage> {
   Widget _gameScreen() {
     return Obx(() {
       GameState state = _controller.state;
+      int diff = _controller.difficulty;
       if (state is Init) {
         return Center(
           child: Column(
             mainAxisAlignment: MainAxisAlignment.center,
             children: <Widget>[
+              Text(
+                "$diff",
+                style: TextStyle(color: Colors.white),
+              ),
               Container(
                 alignment: Alignment.center,
                 width: Get.width,
@@ -80,12 +85,24 @@ class _AirplaneGamePageState extends State<AirplaneGamePage> {
                 child: Row(
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: [
-                    ElevatedButton(onPressed: () {}, child: Text("0")),
+                    ElevatedButton(
+                        onPressed: () {
+                          _controller.setDifficulty(0);
+                        },
+                        child: Text("쉬움")),
                     Padding(
                       padding: const EdgeInsets.symmetric(horizontal: 40),
-                      child: ElevatedButton(onPressed: () {}, child: Text("1")),
+                      child: ElevatedButton(
+                          onPressed: () {
+                            _controller.setDifficulty(1);
+                          },
+                          child: Text("보통")),
                     ),
-                    ElevatedButton(onPressed: () {}, child: Text("2")),
+                    ElevatedButton(
+                        onPressed: () {
+                          _controller.setDifficulty(2);
+                        },
+                        child: Text("어려움")),
                   ],
                 ),
               ),

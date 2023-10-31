@@ -18,12 +18,21 @@ class AirplaneGameController extends GetxController {
   int get score => _score.value;
   final Rx<int> _hitPoint = Rx(5);
   int get hitPoint => _hitPoint.value;
+  Rx<int> _difficulty = Rx(0);
+  int get difficulty => _difficulty.value;
+  void setDifficulty(int diff) {
+    if (diff > 1) {
+      _difficulty.value = 2;
+      return;
+    }
+    _difficulty.value = diff;
+  }
 
   late AirplaneGame _game;
   AirplaneGame get game => _game;
 
   AirplaneGame newGameInstance() {
-    return AirplaneGame(difficulty: 0);
+    return AirplaneGame(difficulty: _difficulty.value);
   }
 
   void setNewGame() {
