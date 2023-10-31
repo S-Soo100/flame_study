@@ -21,6 +21,7 @@ class Slime extends SpriteAnimationComponent
   void onLoad() async {
     super.onLoad();
 
+    anchor = Anchor.center;
     final Paint defaultPaint = Paint()
       ..color = Colors.red
       ..style = PaintingStyle.stroke;

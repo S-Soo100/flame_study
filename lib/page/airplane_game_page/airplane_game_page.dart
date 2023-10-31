@@ -73,6 +73,22 @@ class _AirplaneGamePageState extends State<AirplaneGamePage> {
           child: Column(
             mainAxisAlignment: MainAxisAlignment.center,
             children: <Widget>[
+              Container(
+                alignment: Alignment.center,
+                width: Get.width,
+                height: 60,
+                child: Row(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    ElevatedButton(onPressed: () {}, child: Text("0")),
+                    Padding(
+                      padding: const EdgeInsets.symmetric(horizontal: 40),
+                      child: ElevatedButton(onPressed: () {}, child: Text("1")),
+                    ),
+                    ElevatedButton(onPressed: () {}, child: Text("2")),
+                  ],
+                ),
+              ),
               const Text(
                 "Airplane Game",
                 style: TextStyle(

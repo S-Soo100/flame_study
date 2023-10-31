@@ -6,9 +6,12 @@ import 'package:flame/game.dart';
 import 'package:flame_practice/core/state/game_state.dart';
 import 'package:flame_practice/game/airplane_game/airplane_game_controller.dart';
 import 'package:flame_practice/game/airplane_game/game_components/airplane_game_bg.dart';
+import 'package:flame_practice/game/airplane_game/game_components/enemy_plane.dart';
 import 'package:flame_practice/game/airplane_game/game_components/player_plane.dart';
+import 'package:flame_practice/game/airplane_game/game_components/side_enemy_plain.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'dart:math' as math;
 
 class AirplaneGame extends FlameGame with TapCallbacks, HasCollisionDetection {
   final AirplaneGameBg _gameBg = AirplaneGameBg();
@@ -16,6 +19,7 @@ class AirplaneGame extends FlameGame with TapCallbacks, HasCollisionDetection {
   late AirplaneGameController _controller;
   late Timer? _timer;
   late Timer? _timer2;
+  late Timer? sidePlainTimer;
   late PlayerPlane _player;
 
   AirplaneGame();
@@ -43,6 +47,12 @@ class AirplaneGame extends FlameGame with TapCallbacks, HasCollisionDetection {
         addEnemy();
       }
     });
+    sidePlainTimer =
+        Timer.periodic(const Duration(milliseconds: 2500), (timer) {
+      if (_controller.state is Playing) {
+        addSideEmeny();
+      }
+    });
   }
 
   @override
@@ -58,7 +68,12 @@ class AirplaneGame extends FlameGame with TapCallbacks, HasCollisionDetection {
   }
 
   void addEnemy() async {
-    add(_controller.addRandomEnemy(size.x));
+    await add(_controller.addRandomEnemy(size.x));
+  }
+
+  void addSideEmeny() async {
+    SideEnemyPlain plane = _controller.addRandomSideEmenyPlain(size.x, size.y);
+    await add(plane);
   }
 
   void flyLeft() {

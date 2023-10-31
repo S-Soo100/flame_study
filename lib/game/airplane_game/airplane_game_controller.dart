@@ -5,6 +5,7 @@ import 'package:flame/game.dart';
 import 'package:flame_practice/core/state/game_state.dart';
 import 'package:flame_practice/game/airplane_game/airplane_game.dart';
 import 'package:flame_practice/game/airplane_game/game_components/enemy_plane.dart';
+import 'package:flame_practice/game/airplane_game/game_components/side_enemy_plain.dart';
 import 'package:get/get.dart';
 
 class AirplaneGameController extends GetxController {
@@ -81,8 +82,30 @@ class AirplaneGameController extends GetxController {
         position: Vector2(randomDx * 30, -60), speed: randomSpeed);
   }
 
+  SideEnemyPlain addRandomSideEmenyPlain(double sizex, double sizey) {
+    int randomInt = Random().nextInt(20) + 1;
+    double randomDy = (randomInt * 0.01) * sizey; // 화면 위에서 20% 이내
+    int randomSpeed = Random().nextInt(4) + 3;
+    bool randomSide = Random().nextBool();
+    sideEnemyPlainType type =
+        randomSide ? sideEnemyPlainType.left : sideEnemyPlainType.right;
+    SideEnemyPlain sidePlain = SideEnemyPlain(
+        position: Vector2(randomSide ? 0 : sizex, randomDy),
+        speed: randomSpeed,
+        type: type);
+    sidePlain.angle = randomSide ? -0.25 * pi : 0.25 * pi;
+    return sidePlain;
+  }
+
   void tryAgain() {
     setNewGame();
     gameStart();
+  }
+
+  void debugGameStart() {
+    setNewGame();
+    _state.value = Playing();
+    _score.value = -1;
+    _hitPoint.value = -1;
   }
 }

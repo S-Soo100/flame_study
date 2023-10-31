@@ -5,6 +5,7 @@ import 'package:flame_practice/game/slime_world/game_components/slime_background
 import 'package:flame_practice/game/slime_world/game_components/slime.dart';
 import 'package:flame/game.dart';
 import 'package:flutter/material.dart';
+import 'dart:math' as math;
 
 class SlimeGame extends FlameGame with TapCallbacks, HasCollisionDetection {
   late Slime _slime;
@@ -44,6 +45,14 @@ class SlimeGame extends FlameGame with TapCallbacks, HasCollisionDetection {
     add(_button2);
     _slime2.flipHorizontally();
     super.onLoad();
+  }
+
+  @override
+  void update(double dt) {
+    // TODO: implement update
+    super.update(dt);
+    // // _slime2.angle =
+    // _slime2.angle = 0.5 * math.pi;
   }
 
   @override
