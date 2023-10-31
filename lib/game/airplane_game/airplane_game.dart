@@ -19,9 +19,9 @@ class AirplaneGame extends FlameGame with TapCallbacks, HasCollisionDetection {
   late Timer? _sidePlainTimer;
   late PlayerPlane _player;
   int difficulty;
-  int firstTimerDuration = 2200;
-  int secondTimerDuration = 2800;
-  int sideTimerDuration = 4600;
+  late int firstTimerDuration;
+  late int secondTimerDuration;
+  late int sideTimerDuration;
 
   AirplaneGame({required this.difficulty}) : super();
 
