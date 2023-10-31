@@ -62,22 +62,14 @@ class Slime extends SpriteAnimationComponent
   void onCollision(Set<Vector2> points, PositionComponent other) {
     super.onCollision(points, other);
     if (other is ScreenHitbox) {
-      print("Wall");
       if (position.x < size.x) {
-        print("Wall left");
-        // print("other position ${other.position.x}");
-        // print("slime position ${position.x}");
         position = Vector2(position.x + 1, position.y);
       } else {
-        print("Wall Right");
-        // print("other position ${other.position.x}");
-        // print("slime position ${position.x}");
         position = Vector2(position.x - 1, position.y);
       }
       //...
     } else if (other is Slime) {
       //...
-      // print("Slime Collision");
       if (other.position.x > position.x) {
         other.position = Vector2(other.position.x + 1, other.position.y - 1);
       } else {
@@ -87,17 +79,4 @@ class Slime extends SpriteAnimationComponent
       //...
     }
   }
-
-  // @override
-  // void onCollisionEnd(PositionComponent other) {
-  //   super.onCollisionEnd(other);
-  //   if (other is ScreenHitbox) {
-  //     //...
-  //   } else if (other is Slime) {
-  //     //...
-  //     // print("Slime Collision");
-  //   } else {
-  //     //...
-  //   }
-  // }
 }

@@ -21,7 +21,6 @@ class SlimeButton extends RectangleComponent with TapCallbacks {
   @override
   void onTapDown(TapDownEvent event) {
     super.onTapDown(event);
-    print("Hey on BUtton");
     func();
   }
 }

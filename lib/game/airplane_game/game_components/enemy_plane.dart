@@ -66,7 +66,6 @@ class EnemyPlain extends SpriteComponent with HasGameRef, CollisionCallbacks {
       position = Vector2(position.x, position.y + speed);
     }
     if (position.y + size.y > game.size.y) {
-      print("work");
       removeFromParent();
       _controller.upScore(planeScore);
     }

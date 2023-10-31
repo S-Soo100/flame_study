@@ -41,12 +41,10 @@ class SideEnemyPlain extends EnemyPlain {
     }
 
     if (type == sideEnemyPlainType.left && position.x > gameRef.size.x) {
-      print('side left');
       removeFromParent();
       _controller.upScore(planeScore);
       return;
     } else if (type == sideEnemyPlainType.right && position.x < 0) {
-      print('side right');
       removeFromParent();
       _controller.upScore(planeScore);
       return;

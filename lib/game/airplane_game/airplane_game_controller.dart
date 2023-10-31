@@ -23,7 +23,7 @@ class AirplaneGameController extends GetxController {
   AirplaneGame get game => _game;
 
   AirplaneGame newGameInstance() {
-    return AirplaneGame();
+    return AirplaneGame(difficulty: 0);
   }
 
   void setNewGame() {
@@ -76,18 +76,18 @@ class AirplaneGameController extends GetxController {
     }
   }
 
-  EnemyPlain addRandomEnemy(double sizex) {
+  EnemyPlain addRandomEnemy(double sizex, {required int difficulty}) {
     int randomDx = Random().nextInt(sizex ~/ 30) + 1;
-    int randomSpeed = Random().nextInt(7) + 3;
+    int randomSpeed = Random().nextInt(difficulty * 2 + 3) + 2;
     return EnemyPlain(
         position: Vector2(randomDx * 30, -60), speed: randomSpeed);
   }
 
-  SideEnemyPlain addRandomSideEmenyPlain(double sizex, double sizey) {
+  SideEnemyPlain addRandomSideEmenyPlain(double sizex, double sizey,
+      {required int difficulty}) {
     double randomInt = Random().nextDouble() * 0.1;
-    print(randomInt);
     double randomDy = randomInt * sizey; // 화면 위에서 15% 이내
-    int randomSpeed = Random().nextInt(4) + 3;
+    int randomSpeed = Random().nextInt(difficulty * 2 + 3) + 2;
     bool randomSide = Random().nextBool();
     sideEnemyPlainType type =
         randomSide ? sideEnemyPlainType.left : sideEnemyPlainType.right;

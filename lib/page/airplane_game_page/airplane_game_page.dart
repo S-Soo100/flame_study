@@ -279,7 +279,6 @@ class _AirplaneGamePageState extends State<AirplaneGamePage> {
       setState(() {
         readyCount--;
       });
-      // print("readyCount is ${readyCount}");
       if (readyCount < 0) {
         readyTimer?.cancel();
         readyCount = 3;

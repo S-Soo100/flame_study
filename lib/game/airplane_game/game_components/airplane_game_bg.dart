@@ -5,7 +5,7 @@ class AirplaneGameBg extends SpriteComponent with HasGameRef {
   @override
   Future<void> onLoad() async {
     super.onLoad();
-    add(RectangleHitbox());
+    // add(RectangleHitbox());
     sprite = await gameRef.loadSprite('airplane_game/bg.png');
 
     final _gSize = gameRef.size;
