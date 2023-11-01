@@ -2,6 +2,7 @@ import 'dart:async';
 import 'package:flame/collisions.dart';
 import 'package:flame/experimental.dart';
 import 'package:flame/game.dart';
+import 'package:flame_audio/flame_audio.dart';
 import 'package:flame_practice/core/state/game_state.dart';
 import 'package:flame_practice/game/airplane_game/airplane_game_controller.dart';
 import 'package:flame_practice/game/airplane_game/game_components/airplane_game_bg.dart';
@@ -17,6 +18,7 @@ class AirplaneGame extends FlameGame with TapCallbacks, HasCollisionDetection {
   late Timer? _timer;
   late Timer? _timer2;
   late Timer? _sidePlainTimer;
+  // late Timer? _itemTimer;
   late PlayerPlane _player;
   int difficulty;
   late int firstTimerDuration;
@@ -30,6 +32,8 @@ class AirplaneGame extends FlameGame with TapCallbacks, HasCollisionDetection {
 
   @override
   Future<void> onLoad() async {
+    FlameAudio.bgm.initialize();
+    FlameAudio.bgm.play('airplane_game/bg_music.mp3');
     _controller = Get.find<AirplaneGameController>();
 
     add(ScreenHitbox());
@@ -42,11 +46,25 @@ class AirplaneGame extends FlameGame with TapCallbacks, HasCollisionDetection {
         position: Vector2(size.x / 2 - 30, size.y - 100), hitAction: hitAction);
     await add(_player);
 
-    _setTimerDurationByDifficulty();
+    _setTimerDurationByDifficulty(difficulty);
     _startEnemyAddTimers();
   }
 
-  void _setTimerDurationByDifficulty() {
+  @override
+  void onRemove() {
+    _timer?.cancel();
+    _timer2?.cancel();
+    _sidePlainTimer?.cancel();
+    FlameAudio.bgm.dispose();
+    super.onRemove();
+  }
+
+  @override
+  void update(double dt) async {
+    super.update(dt);
+  }
+
+  void _setTimerDurationByDifficulty(int difficulty) {
     int diff = 2 - difficulty;
     firstTimerDuration = (diff * 1000) + 1100;
     secondTimerDuration = (diff * 1000) + 1700;
@@ -72,19 +90,6 @@ class AirplaneGame extends FlameGame with TapCallbacks, HasCollisionDetection {
         addSideEmeny();
       }
     });
-  }
-
-  @override
-  void onRemove() {
-    _timer?.cancel();
-    _timer2?.cancel();
-    _sidePlainTimer?.cancel();
-    super.onRemove();
-  }
-
-  @override
-  void update(double dt) async {
-    super.update(dt);
   }
 
   void addEnemy() async {

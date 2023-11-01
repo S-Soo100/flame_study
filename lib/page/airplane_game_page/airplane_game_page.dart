@@ -44,20 +44,17 @@ class _AirplaneGamePageState extends State<AirplaneGamePage> {
           title: const Text("Airplane Game"),
         ),
         body: Center(
-          child: LayoutBuilder(
-            builder: (BuildContext context, BoxConstraints constraints) {
-              if (constraints.maxWidth > 500) {
-                return Center(
-                  child: SizedBox(
-                    width: 450,
-                    height: Get.height,
-                    child: _gameScreen(),
-                  ),
-                );
-              }
-              return _gameScreen();
-            },
-          ),
+          child: _gameScreen(),
+          // child: LayoutBuilder(
+          //   builder: (BuildContext context, BoxConstraints constraints) {
+          //     if (constraints.maxWidth > 500) {
+          //       return Center(
+          //         child: _gameScreen(),
+          //       );
+          //     }
+          //     return _gameScreen();
+          //   },
+          // ),
         ));
   }
 

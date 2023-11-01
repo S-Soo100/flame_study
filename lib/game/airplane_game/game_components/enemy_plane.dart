@@ -63,7 +63,7 @@ class EnemyPlain extends SpriteComponent with HasGameRef, CollisionCallbacks {
   @override
   void update(double dt) {
     if (_state == EnemyPlainState.flying) {
-      position = Vector2(position.x, position.y + speed);
+      position = Vector2(position.x, position.y + speed + 0.3);
     }
     if (position.y + size.y > game.size.y) {
       removeFromParent();

@@ -18,7 +18,7 @@ class AirplaneGameBg extends SpriteComponent with HasGameRef {
     if (y > gameRef.size.y) {
       position = Vector2(x, -y);
     } else {
-      position = Vector2(x, y + 2);
+      position = Vector2(x, y + 1.7);
     }
   }
 }

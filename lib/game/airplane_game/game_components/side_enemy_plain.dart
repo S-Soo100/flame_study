@@ -52,16 +52,6 @@ class SideEnemyPlain extends EnemyPlain {
   }
 
   @override
-  void onCollision(Set<Vector2> points, PositionComponent other) {
-    // super.onCollision(points, other);
-    if (other is ScreenHitbox) {
-      // ...
-    } else {
-      // ...
-    }
-  }
-
-  @override
   void stopPlane() {
     _state = EnemyPlainState.hit;
     destroy();
