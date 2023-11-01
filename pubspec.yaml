@@ -68,6 +68,7 @@ flutter:
     - assets/images/airplane_game/
     - assets/images/airplane_game/enemies/
     - assets/images/airplane_game/choppers/
+    - assets/images/airplane_game/items/
     - assets/audio/
     - assets/audio/music/
     - assets/audio/sounds/

@@ -111,6 +111,9 @@ class EnemyPlain extends SpriteComponent with HasGameRef, CollisionCallbacks {
   void stopPlane() {
     _state = EnemyPlainState.hit;
     destroy();
-    Future.delayed(const Duration(seconds: 1), (() => removeFromParent()));
+    Future.delayed(const Duration(seconds: 1), (() {
+      removeFromParent();
+      destroyTimer?.cancel();
+    }));
   }
 }

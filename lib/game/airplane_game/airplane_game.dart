@@ -6,6 +6,7 @@ import 'package:flame_audio/flame_audio.dart';
 import 'package:flame_practice/core/state/game_state.dart';
 import 'package:flame_practice/game/airplane_game/airplane_game_controller.dart';
 import 'package:flame_practice/game/airplane_game/game_components/airplane_game_bg.dart';
+import 'package:flame_practice/game/airplane_game/game_components/item.dart';
 import 'package:flame_practice/game/airplane_game/game_components/player_plane.dart';
 import 'package:flame_practice/game/airplane_game/game_components/side_enemy_plain.dart';
 import 'package:flutter/material.dart';
@@ -18,7 +19,7 @@ class AirplaneGame extends FlameGame with TapCallbacks, HasCollisionDetection {
   late Timer? _timer;
   late Timer? _timer2;
   late Timer? _sidePlainTimer;
-  // late Timer? _itemTimer;
+  late Timer? _itemTimer;
   late PlayerPlane _player;
   int difficulty;
   late int firstTimerDuration;
@@ -32,7 +33,6 @@ class AirplaneGame extends FlameGame with TapCallbacks, HasCollisionDetection {
 
   @override
   Future<void> onLoad() async {
-    FlameAudio.bgm.play('airplane_game/bg_music.mp3');
     _controller = Get.find<AirplaneGameController>();
 
     add(ScreenHitbox());
@@ -54,7 +54,7 @@ class AirplaneGame extends FlameGame with TapCallbacks, HasCollisionDetection {
     _timer?.cancel();
     _timer2?.cancel();
     _sidePlainTimer?.cancel();
-    stopMusic();
+    // stopMusic();
     super.onRemove();
   }
 
@@ -89,6 +89,11 @@ class AirplaneGame extends FlameGame with TapCallbacks, HasCollisionDetection {
         addSideEmeny();
       }
     });
+    _itemTimer = Timer.periodic(Duration(seconds: 13), (timer) {
+      if (_controller.state is Playing) {
+        _controller.addHpUpItems(size.x);
+      }
+    });
   }
 
   void addEnemy() async {
@@ -116,13 +121,24 @@ class AirplaneGame extends FlameGame with TapCallbacks, HasCollisionDetection {
     FlameAudio.play('airplane_game/hit_sound.wav');
   }
 
-  void timerOut() {
+  void cancelAllTimers() {
     _timer?.cancel();
     _timer2?.cancel();
     _sidePlainTimer?.cancel();
+    _itemTimer?.cancel();
   }
 
   void stopMusic() {
     FlameAudio.bgm.stop();
+    // FlameAudio.bgm.dispose();
+  }
+
+  void playBgm() {
+    // FlameAudio.bgm.initialize();
+    FlameAudio.bgm.play('airplane_game/bg_music.mp3');
+  }
+
+  void addHpUpItems(Item item) async {
+    await add(item);
   }
 }

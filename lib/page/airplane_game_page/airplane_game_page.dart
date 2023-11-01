@@ -25,15 +25,15 @@ class _AirplaneGamePageState extends State<AirplaneGamePage> {
   @override
   void initState() {
     super.initState();
-    // _game = AirplaneGame();
     _controller = Get.find<AirplaneGameController>();
     _controller.setNewGame();
   }
 
   @override
   void dispose() {
-    super.dispose();
     _controller.endGame();
+
+    super.dispose();
   }
 
   @override
@@ -45,16 +45,6 @@ class _AirplaneGamePageState extends State<AirplaneGamePage> {
         ),
         body: Center(
           child: _gameScreen(),
-          // child: LayoutBuilder(
-          //   builder: (BuildContext context, BoxConstraints constraints) {
-          //     if (constraints.maxWidth > 500) {
-          //       return Center(
-          //         child: _gameScreen(),
-          //       );
-          //     }
-          //     return _gameScreen();
-          //   },
-          // ),
         ));
   }
 
@@ -150,28 +140,6 @@ class _AirplaneGamePageState extends State<AirplaneGamePage> {
         children: [
           GameWidget(
             game: _controller.game,
-            // overlayBuilderMap: {
-            //   'topHpScoreWidget': (context, game) {
-            //     return Column(
-            //       children: [
-            //         Align(
-            //           alignment: Alignment.center,
-            //           child: TopScoreOverlayWidget(
-            //               hitPoint: _controller.hitPoint,
-            //               score: _controller.score),
-            //         ),
-            //       ],
-            //     );
-            //   },
-            //   'centerOverlayWidget': (context, game) {
-            //     return Align(
-            //         alignment: Alignment.center,
-            //         child: CenterOverlayWidget(
-            //           leftTap: _controller.game.flyLeft,
-            //           rightTap: _controller.game.flyRight,
-            //         ));
-            //   }
-            // },
           ),
           if (state is Playing)
             Align(

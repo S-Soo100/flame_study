@@ -1,3 +1,4 @@
+import 'package:flame_audio/flame_audio.dart';
 import 'package:flame_practice/page/airplane_game_debug_page/airplane_game_debug_page.dart';
 import 'package:flame_practice/page/airplane_game_page/airplane_game_page.dart';
 import 'package:flame_practice/page/slime_game_page/slime_game_page.dart';
@@ -18,6 +19,7 @@ class HomePage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    FlameAudio.bgm.initialize();
     SystemChrome.setPreferredOrientations([DeviceOrientation.portraitUp]);
     return Scaffold(
       appBar: AppBar(),
@@ -31,14 +33,14 @@ class HomePage extends StatelessWidget {
 
   Widget _listTile(int index) {
     return Padding(
-      padding: const EdgeInsets.all(12),
+      padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 0),
       child: InkWell(
         onTap: () {
           Get.to(_list.values.toList()[index]);
         },
         child: Container(
           width: 120,
-          height: 30,
+          height: 60,
           color: Colors.amber,
           alignment: Alignment.center,
           child: Text("${_list.keys.toList()[index]}"),

@@ -2,9 +2,11 @@ import 'dart:async';
 import 'dart:math';
 
 import 'package:flame/game.dart';
+import 'package:flame_audio/flame_audio.dart';
 import 'package:flame_practice/core/state/game_state.dart';
 import 'package:flame_practice/game/airplane_game/airplane_game.dart';
 import 'package:flame_practice/game/airplane_game/game_components/enemy_plane.dart';
+import 'package:flame_practice/game/airplane_game/game_components/item.dart';
 import 'package:flame_practice/game/airplane_game/game_components/side_enemy_plain.dart';
 import 'package:flutter/foundation.dart';
 import 'package:get/get.dart';
@@ -57,7 +59,9 @@ class AirplaneGameController extends GetxController {
 
   void gameStart() {
     _state.value = Ready();
+    _game.playBgm();
     Future.delayed(const Duration(seconds: 3), () {
+      _game = newGameInstance();
       _state.value = Playing();
       _score.value = 0;
       _hitPoint.value = 5;
@@ -68,6 +72,8 @@ class AirplaneGameController extends GetxController {
     _state.value = Init();
     _score.value = 0;
     _hitPoint.value = 5;
+    stopMusic();
+    _game.cancelAllTimers();
   }
 
   void hit() {
@@ -82,6 +88,8 @@ class AirplaneGameController extends GetxController {
   void gameOver() {
     if (state is Playing) {
       _state.value = GameOver();
+      _game.cancelAllTimers();
+      _game.stopMusic();
     }
   }
 
@@ -130,6 +138,22 @@ class AirplaneGameController extends GetxController {
 
   void disposeAll() {
     kDebugMode ? print("dispose all timers") : null;
-    _game.timerOut();
+    // stopMusic();
+    _game.cancelAllTimers();
+  }
+
+  void stopMusic() {
+    _game.stopMusic();
+  }
+
+  void addHpUpItems(double sizex) {
+    int randomDx = Random().nextInt(sizex ~/ 8) + 1;
+    Item hpUpItem = Item(
+        image: 'airplane_game/items/item_hp.png',
+        action: () {
+          _hitPoint.value > 0 ? _hitPoint.value++ : null;
+        },
+        position: Vector2(randomDx * 30, 0));
+    _game.addHpUpItems(hpUpItem);
   }
 }

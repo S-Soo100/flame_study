@@ -1,6 +1,7 @@
 import 'package:flame/collisions.dart';
 import 'package:flame/components.dart';
 import 'package:flame_practice/game/airplane_game/game_components/enemy_plane.dart';
+import 'package:flame_practice/game/airplane_game/game_components/item.dart';
 import 'package:flame_practice/game/slime_world/game_components/slime.dart';
 import 'package:flutter/material.dart';
 
@@ -49,6 +50,8 @@ class PlayerPlane extends SpriteComponent with HasGameRef, CollisionCallbacks {
         other.stopPlane();
         hitAction();
       }
+    } else if (other is Item) {
+      other.itemAction();
     }
   }
 }
