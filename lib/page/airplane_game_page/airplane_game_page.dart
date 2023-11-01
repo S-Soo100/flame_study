@@ -4,7 +4,6 @@ import 'package:flame/game.dart';
 import 'package:flame_practice/core/state/game_state.dart';
 import 'package:flame_practice/game/airplane_game/airplane_game_controller.dart';
 import 'package:flame_practice/game/airplane_game/game_components/center_overlay_widget.dart';
-import 'package:flame_practice/game/airplane_game/airplane_game.dart';
 import 'package:flame_practice/game/airplane_game/game_components/top_score_overlay_widget.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
@@ -17,7 +16,7 @@ class AirplaneGamePage extends StatefulWidget {
 }
 
 class _AirplaneGamePageState extends State<AirplaneGamePage> {
-  late AirplaneGame _game;
+  // late AirplaneGame _game;
   late AirplaneGameController _controller = Get.find<AirplaneGameController>();
 
   Timer? readyTimer;
@@ -26,12 +25,9 @@ class _AirplaneGamePageState extends State<AirplaneGamePage> {
   @override
   void initState() {
     super.initState();
+    // _game = AirplaneGame();
     _controller = Get.find<AirplaneGameController>();
-    _game = AirplaneGame(moveLeft: fasd, moveRight: fasd);
-  }
-
-  AirplaneGame instance() {
-    return AirplaneGame(moveLeft: fasd, moveRight: fasd);
+    _controller.setNewGame();
   }
 
   @override
@@ -72,32 +68,120 @@ class _AirplaneGamePageState extends State<AirplaneGamePage> {
   Widget _gameScreen() {
     return Obx(() {
       GameState state = _controller.state;
+      int diff = _controller.difficulty;
       if (state is Init) {
         return Center(
-          child: GestureDetector(
-            onTap: () {
-              getReady();
-              _controller.gameStart();
-            },
-            child: Padding(
-              padding: const EdgeInsets.all(8.0),
-              child: Container(
-                  color: Colors.amber,
-                  padding: const EdgeInsets.all(20),
-                  child: const Text("Ready")),
-            ),
+          child: Column(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: <Widget>[
+              Text(
+                "$diff",
+                style: TextStyle(color: Colors.white),
+              ),
+              Container(
+                alignment: Alignment.center,
+                width: Get.width,
+                height: 60,
+                child: Row(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    ElevatedButton(
+                        onPressed: () {
+                          _controller.setDifficulty(0);
+                        },
+                        child: Text("쉬움")),
+                    Padding(
+                      padding: const EdgeInsets.symmetric(horizontal: 40),
+                      child: ElevatedButton(
+                          onPressed: () {
+                            _controller.setDifficulty(1);
+                          },
+                          child: Text("보통")),
+                    ),
+                    ElevatedButton(
+                        onPressed: () {
+                          _controller.setDifficulty(2);
+                        },
+                        child: Text("어려움")),
+                  ],
+                ),
+              ),
+              const Text(
+                "Airplane Game",
+                style: TextStyle(
+                    fontSize: 40,
+                    fontWeight: FontWeight.bold,
+                    color: Colors.white),
+              ),
+              ClipRect(
+                child: Container(
+                  width: 200,
+                  height: 200,
+                  decoration: const BoxDecoration(
+                      image: DecorationImage(
+                          alignment: Alignment(0, 0),
+                          fit: BoxFit.contain,
+                          image: AssetImage(
+                              "assets/images/airplane_game/player1.png"))),
+                ),
+              ),
+              Padding(
+                padding: const EdgeInsets.all(32.0),
+                child: ElevatedButton(
+                  onPressed: () {
+                    getReady();
+                    _controller.gameStart();
+                  },
+                  style: ElevatedButton.styleFrom(
+                    backgroundColor: Colors.redAccent,
+                    textStyle: const TextStyle(fontSize: 24),
+                    padding: const EdgeInsets.symmetric(
+                        horizontal: 30, vertical: 10),
+                  ),
+                  child: const Text(
+                    "Start Game",
+                    style: TextStyle(
+                        fontWeight: FontWeight.bold, color: Colors.white),
+                  ),
+                ),
+              ),
+            ],
           ),
         );
       }
       return Stack(
         children: [
-          GameWidget(game: _game),
+          GameWidget(
+            game: _controller.game,
+            // overlayBuilderMap: {
+            //   'topHpScoreWidget': (context, game) {
+            //     return Column(
+            //       children: [
+            //         Align(
+            //           alignment: Alignment.center,
+            //           child: TopScoreOverlayWidget(
+            //               hitPoint: _controller.hitPoint,
+            //               score: _controller.score),
+            //         ),
+            //       ],
+            //     );
+            //   },
+            //   'centerOverlayWidget': (context, game) {
+            //     return Align(
+            //         alignment: Alignment.center,
+            //         child: CenterOverlayWidget(
+            //           leftTap: _controller.game.flyLeft,
+            //           rightTap: _controller.game.flyRight,
+            //         ));
+            //   }
+            // },
+          ),
           if (state is Playing)
             Align(
                 alignment: Alignment.center,
                 child: CenterOverlayWidget(
-                  leftTap: _game.flyLeft,
-                  rightTap: _game.flyRight,
+                  leftTap: _controller.game.flyLeft,
+                  rightTap: _controller.game.flyRight,
                 )),
           Align(
             alignment: Alignment.topCenter,
@@ -154,8 +238,8 @@ class _AirplaneGamePageState extends State<AirplaneGamePage> {
                   padding: const EdgeInsets.symmetric(horizontal: 8),
                   child: GestureDetector(
                     onTap: () {
+                      getReady();
                       _controller.tryAgain();
-                      _game = AirplaneGame(moveLeft: fasd, moveRight: fasd);
                     },
                     child: Container(
                       width: 120,
@@ -208,11 +292,10 @@ class _AirplaneGamePageState extends State<AirplaneGamePage> {
   }
 
   void getReady() {
-    readyTimer = Timer.periodic(Duration(milliseconds: 1000), (timer) {
+    readyTimer = Timer.periodic(const Duration(milliseconds: 1000), (timer) {
       setState(() {
         readyCount--;
       });
-      print("readyCount is ${readyCount}");
       if (readyCount < 0) {
         readyTimer?.cancel();
         readyCount = 3;

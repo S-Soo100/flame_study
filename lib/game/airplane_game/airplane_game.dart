@@ -1,47 +1,75 @@
 import 'dart:async';
-import 'dart:math';
 import 'package:flame/collisions.dart';
 import 'package:flame/experimental.dart';
 import 'package:flame/game.dart';
 import 'package:flame_practice/core/state/game_state.dart';
 import 'package:flame_practice/game/airplane_game/airplane_game_controller.dart';
 import 'package:flame_practice/game/airplane_game/game_components/airplane_game_bg.dart';
-import 'package:flame_practice/game/airplane_game/game_components/enemy_plane.dart';
 import 'package:flame_practice/game/airplane_game/game_components/player_plane.dart';
+import 'package:flame_practice/game/airplane_game/game_components/side_enemy_plain.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
 class AirplaneGame extends FlameGame with TapCallbacks, HasCollisionDetection {
   final AirplaneGameBg _gameBg = AirplaneGameBg();
+  final AirplaneGameBg _gameBgSecond = AirplaneGameBg();
   late AirplaneGameController _controller;
   late Timer? _timer;
   late Timer? _timer2;
+  late Timer? _sidePlainTimer;
   late PlayerPlane _player;
-  Function moveLeft;
-  Function moveRight;
+  int difficulty;
+  late int firstTimerDuration;
+  late int secondTimerDuration;
+  late int sideTimerDuration;
 
-  AirplaneGame({required this.moveLeft, required this.moveRight});
+  AirplaneGame({required this.difficulty}) : super();
 
   @override
-  Color backgroundColor() => const Color(0xff434343);
+  Color backgroundColor() => const Color(0xffE8C274);
 
   @override
   Future<void> onLoad() async {
     _controller = Get.find<AirplaneGameController>();
+
     add(ScreenHitbox());
+
     await add(_gameBg);
+    _gameBgSecond.position = Vector2(0, -size.y);
+    await add(_gameBgSecond);
+
     _player = PlayerPlane(
         position: Vector2(size.x / 2 - 30, size.y - 100), hitAction: hitAction);
     await add(_player);
 
-    _timer = Timer.periodic(const Duration(milliseconds: 2200), (timer) {
+    _setTimerDurationByDifficulty();
+    _startEnemyAddTimers();
+  }
+
+  void _setTimerDurationByDifficulty() {
+    int diff = 2 - difficulty;
+    firstTimerDuration = (diff * 1000) + 1100;
+    secondTimerDuration = (diff * 1000) + 1700;
+    sideTimerDuration = (diff * 1000) + 2600;
+  }
+
+  void _startEnemyAddTimers() {
+    _timer =
+        Timer.periodic(Duration(milliseconds: firstTimerDuration), (timer) {
       if (_controller.state is Playing) {
         addEnemy();
       }
     });
-    _timer2 = Timer.periodic(const Duration(milliseconds: 2800), (timer) {
+    _timer2 =
+        Timer.periodic(Duration(milliseconds: secondTimerDuration), (timer) {
       if (_controller.state is Playing) {
         addEnemy();
+      }
+    });
+    _sidePlainTimer =
+        Timer.periodic(Duration(milliseconds: sideTimerDuration), (timer) {
+      if (_controller.state is Playing) {
+        addSideEmeny();
       }
     });
   }
@@ -50,6 +78,7 @@ class AirplaneGame extends FlameGame with TapCallbacks, HasCollisionDetection {
   void onRemove() {
     _timer?.cancel();
     _timer2?.cancel();
+    _sidePlainTimer?.cancel();
     super.onRemove();
   }
 
@@ -59,20 +88,30 @@ class AirplaneGame extends FlameGame with TapCallbacks, HasCollisionDetection {
   }
 
   void addEnemy() async {
-    add(_controller.addRandomEnemy());
+    await add(_controller.addRandomEnemy(difficulty: difficulty, size.x));
+  }
+
+  void addSideEmeny() async {
+    SideEnemyPlain plane = _controller.addRandomSideEmenyPlain(
+        difficulty: difficulty, size.x, size.y);
+    await add(plane);
   }
 
   void flyLeft() {
-    moveLeft();
     _player.position = Vector2(_player.position.x - 17, _player.position.y);
   }
 
   void flyRight() {
-    moveRight();
     _player.position = Vector2(_player.position.x + 17, _player.position.y);
   }
 
   void hitAction() {
     _controller.hit();
+  }
+
+  void timerOut() {
+    _timer?.cancel();
+    _timer2?.cancel();
+    _sidePlainTimer?.cancel();
   }
 }

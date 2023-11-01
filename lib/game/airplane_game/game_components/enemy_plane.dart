@@ -65,6 +65,10 @@ class EnemyPlain extends SpriteComponent with HasGameRef, CollisionCallbacks {
     if (_state == EnemyPlainState.flying) {
       position = Vector2(position.x, position.y + speed);
     }
+    if (position.y + size.y > game.size.y) {
+      removeFromParent();
+      _controller.upScore(planeScore);
+    }
     super.update(dt);
   }
 
@@ -72,14 +76,15 @@ class EnemyPlain extends SpriteComponent with HasGameRef, CollisionCallbacks {
   void onCollision(Set<Vector2> points, PositionComponent other) {
     super.onCollision(points, other);
     if (other is ScreenHitbox) {
-      if (position.x > game.size.x) {
-        position = Vector2(game.size.x - 60, position.y);
+      if (position.x < game.size.x) {
+        if (position.x < size.x) {
+          position = Vector2(0, position.y);
+          return;
+        } else if (position.x + size.x - 1 > game.size.x) {
+          position = Vector2(game.size.x - size.x, position.y);
+          return;
+        }
       }
-      if (position.y < game.size.y) {
-        removeFromParent();
-        _controller.upScore(planeScore);
-      } else {}
-      //...
     } else {
       //...
     }

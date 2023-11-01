@@ -1,6 +1,8 @@
+import 'package:flame_practice/page/airplane_game_debug_page/airplane_game_debug_page.dart';
 import 'package:flame_practice/page/airplane_game_page/airplane_game_page.dart';
 import 'package:flame_practice/page/slime_game_page/slime_game_page.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:get/get.dart';
 
 class HomePage extends StatelessWidget {
@@ -8,11 +10,13 @@ class HomePage extends StatelessWidget {
 
   final Map<String, Widget> _list = {
     "slime_world": SlimeGamePage(),
-    "airplane_game": AirplaneGamePage()
+    "airplane_game": AirplaneGamePage(),
+    "airplane_game_debug": AirplaneGameDebugPage()
   };
 
   @override
   Widget build(BuildContext context) {
+    SystemChrome.setPreferredOrientations([DeviceOrientation.portraitUp]);
     return Scaffold(
       appBar: AppBar(),
       body: Center(
