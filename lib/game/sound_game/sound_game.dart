@@ -23,12 +23,12 @@ class SoundGame extends FlameGame with TapDetector {
       minPlayers: 1,
       maxPlayers: 4,
     );
-    // startBgmMusic();
+    startBgmMusic();
   }
 
   @override
   void onRemove() {
-    // FlameAudio.bgm.dispose();
+    FlameAudio.bgm.dispose();
     super.onRemove();
   }
 

@@ -32,7 +32,6 @@ class AirplaneGame extends FlameGame with TapCallbacks, HasCollisionDetection {
 
   @override
   Future<void> onLoad() async {
-    FlameAudio.bgm.initialize();
     FlameAudio.bgm.play('airplane_game/bg_music.mp3');
     _controller = Get.find<AirplaneGameController>();
 
@@ -55,7 +54,7 @@ class AirplaneGame extends FlameGame with TapCallbacks, HasCollisionDetection {
     _timer?.cancel();
     _timer2?.cancel();
     _sidePlainTimer?.cancel();
-    FlameAudio.bgm.dispose();
+    stopMusic();
     super.onRemove();
   }
 
@@ -111,12 +110,19 @@ class AirplaneGame extends FlameGame with TapCallbacks, HasCollisionDetection {
   }
 
   void hitAction() {
+    // pool.start();
     _controller.hit();
+
+    FlameAudio.play('airplane_game/hit_sound.wav');
   }
 
   void timerOut() {
     _timer?.cancel();
     _timer2?.cancel();
     _sidePlainTimer?.cancel();
+  }
+
+  void stopMusic() {
+    FlameAudio.bgm.stop();
   }
 }
