@@ -101,7 +101,7 @@ class AirplaneGame extends FlameGame with TapCallbacks, HasCollisionDetection {
   }
 
   void addSideEmeny() async {
-    SideEnemyPlain plane = _controller.addRandomSideEmenyPlain(
+    SideEnemyPlane plane = _controller.addRandomSideEmenyPlain(
         difficulty: difficulty, size.x, size.y);
     await add(plane);
   }
