@@ -2,21 +2,24 @@ import 'dart:async';
 import 'package:flame/collisions.dart';
 import 'package:flame/experimental.dart';
 import 'package:flame/game.dart';
+import 'package:flame_audio/flame_audio.dart';
 import 'package:flame_practice/core/state/game_state.dart';
 import 'package:flame_practice/game/airplane_game/airplane_game_controller.dart';
 import 'package:flame_practice/game/airplane_game/game_components/airplane_game_bg.dart';
+import 'package:flame_practice/game/airplane_game/game_components/item.dart';
 import 'package:flame_practice/game/airplane_game/game_components/player_plane.dart';
 import 'package:flame_practice/game/airplane_game/game_components/side_enemy_plain.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
 class AirplaneGame extends FlameGame with TapCallbacks, HasCollisionDetection {
-  final AirplaneGameBg _gameBg = AirplaneGameBg();
-  final AirplaneGameBg _gameBgSecond = AirplaneGameBg();
+  final AirplaneGameBg _gameBg = AirplaneGameBg(type: 0);
+  final AirplaneGameBg _gameBgSecond = AirplaneGameBg(type: 1);
   late AirplaneGameController _controller;
   late Timer? _timer;
   late Timer? _timer2;
   late Timer? _sidePlainTimer;
+  late Timer? _itemTimer;
   late PlayerPlane _player;
   int difficulty;
   late int firstTimerDuration;
@@ -26,7 +29,7 @@ class AirplaneGame extends FlameGame with TapCallbacks, HasCollisionDetection {
   AirplaneGame({required this.difficulty}) : super();
 
   @override
-  Color backgroundColor() => const Color(0xffE8C274);
+  Color backgroundColor() => const Color(0xffCB815E);
 
   @override
   Future<void> onLoad() async {
@@ -39,14 +42,28 @@ class AirplaneGame extends FlameGame with TapCallbacks, HasCollisionDetection {
     await add(_gameBgSecond);
 
     _player = PlayerPlane(
-        position: Vector2(size.x / 2 - 30, size.y - 100), hitAction: hitAction);
+        position: Vector2(size.x / 2 - 42, size.y - 100), hitAction: hitAction);
     await add(_player);
 
-    _setTimerDurationByDifficulty();
+    _setTimerDurationByDifficulty(difficulty);
     _startEnemyAddTimers();
   }
 
-  void _setTimerDurationByDifficulty() {
+  @override
+  void onRemove() {
+    _timer?.cancel();
+    _timer2?.cancel();
+    _sidePlainTimer?.cancel();
+    // stopMusic();
+    super.onRemove();
+  }
+
+  @override
+  void update(double dt) async {
+    super.update(dt);
+  }
+
+  void _setTimerDurationByDifficulty(int difficulty) {
     int diff = 2 - difficulty;
     firstTimerDuration = (diff * 1000) + 1100;
     secondTimerDuration = (diff * 1000) + 1700;
@@ -72,19 +89,11 @@ class AirplaneGame extends FlameGame with TapCallbacks, HasCollisionDetection {
         addSideEmeny();
       }
     });
-  }
-
-  @override
-  void onRemove() {
-    _timer?.cancel();
-    _timer2?.cancel();
-    _sidePlainTimer?.cancel();
-    super.onRemove();
-  }
-
-  @override
-  void update(double dt) async {
-    super.update(dt);
+    _itemTimer = Timer.periodic(const Duration(seconds: 16), (timer) {
+      if (_controller.state is Playing) {
+        _controller.addHpUpItems(size.x);
+      }
+    });
   }
 
   void addEnemy() async {
@@ -92,7 +101,7 @@ class AirplaneGame extends FlameGame with TapCallbacks, HasCollisionDetection {
   }
 
   void addSideEmeny() async {
-    SideEnemyPlain plane = _controller.addRandomSideEmenyPlain(
+    SideEnemyPlane plane = _controller.addRandomSideEmenyPlain(
         difficulty: difficulty, size.x, size.y);
     await add(plane);
   }
@@ -106,12 +115,30 @@ class AirplaneGame extends FlameGame with TapCallbacks, HasCollisionDetection {
   }
 
   void hitAction() {
+    // pool.start();
     _controller.hit();
+
+    FlameAudio.play('airplane_game/hit_sound.wav');
   }
 
-  void timerOut() {
+  void cancelAllTimers() {
     _timer?.cancel();
     _timer2?.cancel();
     _sidePlainTimer?.cancel();
+    _itemTimer?.cancel();
+  }
+
+  void stopMusic() {
+    FlameAudio.bgm.stop();
+    // FlameAudio.bgm.dispose();
+  }
+
+  void playBgm() {
+    // FlameAudio.bgm.initialize();
+    FlameAudio.bgm.play('airplane_game/bg_music.mp3');
+  }
+
+  void addHpUpItems(Item item) async {
+    await add(item);
   }
 }

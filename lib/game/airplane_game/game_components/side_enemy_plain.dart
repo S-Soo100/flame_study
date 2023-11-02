@@ -11,12 +11,13 @@ import 'package:get/get.dart';
 
 enum sideEnemyPlainType { left, right }
 
-class SideEnemyPlain extends EnemyPlain {
+class SideEnemyPlane extends EnemyPlain {
+  static const double enemySize = 56.0;
   final sideEnemyPlainType type;
   EnemyPlainState _state = EnemyPlainState.flying;
   EnemyPlainState get state => _state;
   late Sprite? _spirte;
-  SideEnemyPlain(
+  SideEnemyPlane(
       {required super.position, required super.speed, required this.type});
   late AirplaneGameController _controller;
 
@@ -48,16 +49,6 @@ class SideEnemyPlain extends EnemyPlain {
       removeFromParent();
       _controller.upScore(planeScore);
       return;
-    }
-  }
-
-  @override
-  void onCollision(Set<Vector2> points, PositionComponent other) {
-    // super.onCollision(points, other);
-    if (other is ScreenHitbox) {
-      // ...
-    } else {
-      // ...
     }
   }
 

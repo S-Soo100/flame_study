@@ -38,6 +38,8 @@ dependencies:
   flame: ^1.7.3
   flame_tiled: ^1.10.1
   get: ^4.6.5
+  flame_audio: ^2.0.2
+  audioplayers: ^4.1.0
 
 dev_dependencies:
   flutter_test:
@@ -67,6 +69,11 @@ flutter:
     - assets/images/airplane_game/
     - assets/images/airplane_game/enemies/
     - assets/images/airplane_game/choppers/
+    - assets/images/airplane_game/items/
+    - assets/audio/
+    - assets/audio/music/
+    - assets/audio/sounds/
+    - assets/audio/airplane_game/
   #   - images/a_dot_ham.jpeg
 
   # An image asset can refer to one or more resolution-specific "variants", see

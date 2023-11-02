@@ -25,15 +25,15 @@ class _AirplaneGamePageState extends State<AirplaneGamePage> {
   @override
   void initState() {
     super.initState();
-    // _game = AirplaneGame();
     _controller = Get.find<AirplaneGameController>();
     _controller.setNewGame();
   }
 
   @override
   void dispose() {
-    super.dispose();
     _controller.endGame();
+
+    super.dispose();
   }
 
   @override
@@ -44,20 +44,7 @@ class _AirplaneGamePageState extends State<AirplaneGamePage> {
           title: const Text("Airplane Game"),
         ),
         body: Center(
-          child: LayoutBuilder(
-            builder: (BuildContext context, BoxConstraints constraints) {
-              if (constraints.maxWidth > 500) {
-                return Center(
-                  child: SizedBox(
-                    width: 450,
-                    height: Get.height,
-                    child: _gameScreen(),
-                  ),
-                );
-              }
-              return _gameScreen();
-            },
-          ),
+          child: _gameScreen(),
         ));
   }
 
@@ -151,30 +138,10 @@ class _AirplaneGamePageState extends State<AirplaneGamePage> {
       }
       return Stack(
         children: [
-          GameWidget(
-            game: _controller.game,
-            // overlayBuilderMap: {
-            //   'topHpScoreWidget': (context, game) {
-            //     return Column(
-            //       children: [
-            //         Align(
-            //           alignment: Alignment.center,
-            //           child: TopScoreOverlayWidget(
-            //               hitPoint: _controller.hitPoint,
-            //               score: _controller.score),
-            //         ),
-            //       ],
-            //     );
-            //   },
-            //   'centerOverlayWidget': (context, game) {
-            //     return Align(
-            //         alignment: Alignment.center,
-            //         child: CenterOverlayWidget(
-            //           leftTap: _controller.game.flyLeft,
-            //           rightTap: _controller.game.flyRight,
-            //         ));
-            //   }
-            // },
+          Center(
+            child: GameWidget(
+              game: _controller.game,
+            ),
           ),
           if (state is Playing)
             Align(

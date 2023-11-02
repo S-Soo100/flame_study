@@ -9,7 +9,7 @@ import 'package:get/get.dart';
 enum EnemyPlainState { flying, hit }
 
 class EnemyPlain extends SpriteComponent with HasGameRef, CollisionCallbacks {
-  static const double enemySize = 60.0;
+  static const double enemySize = 76.0;
   late AirplaneGameController _controller;
   final int speed;
   EnemyPlain({required position, required this.speed})
@@ -23,22 +23,37 @@ class EnemyPlain extends SpriteComponent with HasGameRef, CollisionCallbacks {
   late Sprite? _spirte;
 
   String initRandomType() {
-    int type = Random().nextInt(4);
+    int type = Random().nextInt(3);
     switch (type) {
       case 0:
-        planeScore = 20;
-        return 'airplane_game/enemies/enemy1-1.png';
-      case 1:
         planeScore = 100;
-        return 'airplane_game/enemies/enemy2-1.png';
+        return 'airplane_game/enemies/ship_0000.png';
+      case 1:
+        planeScore = 120;
+        return 'airplane_game/enemies/ship_0002.png';
       case 2:
-        planeScore = 50;
-        return 'airplane_game/enemies/enemy3-1.png';
-      case 3:
-        planeScore = 30;
-        return 'airplane_game/choppers/chopper2-2.png';
+        planeScore = 130;
+        return 'airplane_game/enemies/ship_0003.png';
+      // case 3:
+      //   planeScore = 30;
+      //   return 'airplane_game/enemies/ship_0004.png';
+      // case 4:
+      //   planeScore = 20;
+      //   return 'airplane_game/enemies/ship_0006.png';
+      // case 5:
+      //   planeScore = 50;
+      //   return 'airplane_game/enemies/ship_0007.png';
+      // case 6:
+      //   planeScore = 60;
+      //   return 'airplane_game/enemies/ship_0008.png';
+      // case 7:
+      //   planeScore = 20;
+      //   return 'airplane_game/enemies/ship_0010.png';
+      // case 8:
+      //   planeScore = 20;
+      //   return 'airplane_game/enemies/ship_0011.png';
       default:
-        return 'airplane_game/enemies/enemy3-1.png';
+        return 'airplane_game/enemies/ship_0010.png';
     }
   }
 
@@ -50,6 +65,8 @@ class EnemyPlain extends SpriteComponent with HasGameRef, CollisionCallbacks {
     _spirte = await gameRef.loadSprite(planeType);
     sprite = _spirte;
     position = position;
+    angle = angle + pi;
+    // anchor = Anchor.center;
 
     final Paint defaultPaint = Paint()
       ..color = Colors.red
@@ -63,9 +80,9 @@ class EnemyPlain extends SpriteComponent with HasGameRef, CollisionCallbacks {
   @override
   void update(double dt) {
     if (_state == EnemyPlainState.flying) {
-      position = Vector2(position.x, position.y + speed);
+      position = Vector2(position.x, position.y + speed + 0.3);
     }
-    if (position.y + size.y > game.size.y) {
+    if (position.y + 1 > game.size.y) {
       removeFromParent();
       _controller.upScore(planeScore);
     }
@@ -111,6 +128,9 @@ class EnemyPlain extends SpriteComponent with HasGameRef, CollisionCallbacks {
   void stopPlane() {
     _state = EnemyPlainState.hit;
     destroy();
-    Future.delayed(const Duration(seconds: 1), (() => removeFromParent()));
+    Future.delayed(const Duration(seconds: 1), (() {
+      removeFromParent();
+      destroyTimer?.cancel();
+    }));
   }
 }
