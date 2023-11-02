@@ -42,7 +42,7 @@ class AirplaneGame extends FlameGame with TapCallbacks, HasCollisionDetection {
     await add(_gameBgSecond);
 
     _player = PlayerPlane(
-        position: Vector2(size.x / 2, size.y - 60), hitAction: hitAction);
+        position: Vector2(size.x / 2 - 42, size.y - 100), hitAction: hitAction);
     await add(_player);
 
     _setTimerDurationByDifficulty(difficulty);

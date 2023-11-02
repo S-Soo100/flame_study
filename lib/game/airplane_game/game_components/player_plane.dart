@@ -32,7 +32,7 @@ class PlayerPlane extends SpriteAnimationComponent
     add(hitbox);
     await _loadAnimations();
     animation = _standingAnimation;
-    anchor = Anchor.center;
+    // anchor = Anchor.center;
   }
 
   @override

@@ -138,8 +138,10 @@ class _AirplaneGamePageState extends State<AirplaneGamePage> {
       }
       return Stack(
         children: [
-          GameWidget(
-            game: _controller.game,
+          Center(
+            child: GameWidget(
+              game: _controller.game,
+            ),
           ),
           if (state is Playing)
             Align(
