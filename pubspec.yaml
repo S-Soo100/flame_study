@@ -39,6 +39,7 @@ dependencies:
   flame_tiled: ^1.10.1
   get: ^4.6.5
   flame_audio: ^2.0.2
+  audioplayers: ^4.1.0
 
 dev_dependencies:
   flutter_test:

@@ -12,6 +12,7 @@ import 'package:get/get.dart';
 enum sideEnemyPlainType { left, right }
 
 class SideEnemyPlain extends EnemyPlain {
+  static const double enemySize = 56.0;
   final sideEnemyPlainType type;
   EnemyPlainState _state = EnemyPlainState.flying;
   EnemyPlainState get state => _state;

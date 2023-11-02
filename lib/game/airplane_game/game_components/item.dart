@@ -8,7 +8,7 @@ enum ItemState { falling, hit }
 class Item extends SpriteComponent with HasGameRef, CollisionCallbacks {
   ItemState _state = ItemState.falling;
   ItemState get state => _state;
-  static const double playerSize = 48.0;
+  static const double playerSize = 64.0;
   late ShapeHitbox hitbox;
   String image;
   Function action;

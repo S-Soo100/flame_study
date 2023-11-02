@@ -1,12 +1,17 @@
 import 'package:flame/collisions.dart';
 import 'package:flame/components.dart';
+import 'package:flame/sprite.dart';
 import 'package:flame_practice/game/airplane_game/game_components/enemy_plane.dart';
 import 'package:flame_practice/game/airplane_game/game_components/item.dart';
 import 'package:flame_practice/game/slime_world/game_components/slime.dart';
 import 'package:flutter/material.dart';
 
-class PlayerPlane extends SpriteComponent with HasGameRef, CollisionCallbacks {
-  static const double playerSize = 60.0;
+class PlayerPlane extends SpriteAnimationComponent
+    with HasGameRef, CollisionCallbacks {
+  final double _animationSpeed = 0.5;
+  final double _playerSpeed = 300;
+  late final SpriteAnimation _standingAnimation;
+  static const double playerSize = 84.0;
   final Function hitAction;
   PlayerPlane({required position, required this.hitAction})
       : super(size: Vector2.all(playerSize), position: position);
@@ -15,7 +20,7 @@ class PlayerPlane extends SpriteComponent with HasGameRef, CollisionCallbacks {
   @override
   void onLoad() async {
     super.onLoad();
-    sprite = await gameRef.loadSprite('airplane_game/player1.png');
+    // sprite = await gameRef.loadSprite('airplane_game/player_red_plane.png');
     position = position;
 
     final Paint defaultPaint = Paint()
@@ -25,6 +30,9 @@ class PlayerPlane extends SpriteComponent with HasGameRef, CollisionCallbacks {
       ..paint = defaultPaint
       ..renderShape = true;
     add(hitbox);
+    await _loadAnimations();
+    animation = _standingAnimation;
+    anchor = Anchor.center;
   }
 
   @override
@@ -53,5 +61,19 @@ class PlayerPlane extends SpriteComponent with HasGameRef, CollisionCallbacks {
     } else if (other is Item) {
       other.itemAction();
     }
+  }
+
+  Future<void> _loadAnimations() async {
+    final spriteSheet = SpriteSheet(
+        image: await gameRef.images
+            .load('airplane_game/player_red_plane_sprite2.png'),
+        srcSize: Vector2(128.0, 128.0));
+
+    _standingAnimation = spriteSheet.createAnimation(
+      row: 0,
+      stepTime: _animationSpeed,
+      from: 0,
+      to: 5,
+    );
   }
 }

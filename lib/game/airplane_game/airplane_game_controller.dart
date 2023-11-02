@@ -61,7 +61,6 @@ class AirplaneGameController extends GetxController {
     _state.value = Ready();
     _game.playBgm();
     Future.delayed(const Duration(seconds: 3), () {
-      _game = newGameInstance();
       _state.value = Playing();
       _score.value = 0;
       _hitPoint.value = 5;
@@ -113,6 +112,7 @@ class AirplaneGameController extends GetxController {
         speed: randomSpeed,
         type: type);
     sidePlain.angle = randomSide ? -0.25 * pi : 0.25 * pi;
+    sidePlain.size = Vector2.all(60);
     return sidePlain;
   }
 

@@ -13,8 +13,8 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
 class AirplaneGame extends FlameGame with TapCallbacks, HasCollisionDetection {
-  final AirplaneGameBg _gameBg = AirplaneGameBg();
-  final AirplaneGameBg _gameBgSecond = AirplaneGameBg();
+  final AirplaneGameBg _gameBg = AirplaneGameBg(type: 0);
+  final AirplaneGameBg _gameBgSecond = AirplaneGameBg(type: 1);
   late AirplaneGameController _controller;
   late Timer? _timer;
   late Timer? _timer2;
@@ -29,7 +29,7 @@ class AirplaneGame extends FlameGame with TapCallbacks, HasCollisionDetection {
   AirplaneGame({required this.difficulty}) : super();
 
   @override
-  Color backgroundColor() => const Color(0xffE8C274);
+  Color backgroundColor() => const Color(0xffCB815E);
 
   @override
   Future<void> onLoad() async {
@@ -42,7 +42,7 @@ class AirplaneGame extends FlameGame with TapCallbacks, HasCollisionDetection {
     await add(_gameBgSecond);
 
     _player = PlayerPlane(
-        position: Vector2(size.x / 2 - 30, size.y - 100), hitAction: hitAction);
+        position: Vector2(size.x / 2, size.y - 60), hitAction: hitAction);
     await add(_player);
 
     _setTimerDurationByDifficulty(difficulty);
@@ -89,7 +89,7 @@ class AirplaneGame extends FlameGame with TapCallbacks, HasCollisionDetection {
         addSideEmeny();
       }
     });
-    _itemTimer = Timer.periodic(Duration(seconds: 13), (timer) {
+    _itemTimer = Timer.periodic(const Duration(seconds: 16), (timer) {
       if (_controller.state is Playing) {
         _controller.addHpUpItems(size.x);
       }
