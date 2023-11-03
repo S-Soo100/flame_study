@@ -29,6 +29,7 @@ class _AirplaneGameDebugPageState extends State<AirplaneGameDebugPage> {
     super.initState();
     _controller = Get.find<AirplaneGameController>();
     _controller.debugGameStart();
+    // _controller.disposeAll();
   }
 
   @override

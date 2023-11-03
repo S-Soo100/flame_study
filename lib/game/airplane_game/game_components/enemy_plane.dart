@@ -110,6 +110,7 @@ class EnemyPlain extends SpriteComponent with HasGameRef, CollisionCallbacks {
   ASYNC.Timer? destroyTimer;
 
   void destroy() async {
+    setStateToHit();
     _spirte = await gameRef.loadSprite(planeType);
     bool blink = false;
     sprite = null;
@@ -123,14 +124,25 @@ class EnemyPlain extends SpriteComponent with HasGameRef, CollisionCallbacks {
         blink = true;
       }
     });
-  }
-
-  void stopPlane() {
-    _state = EnemyPlainState.hit;
-    destroy();
     Future.delayed(const Duration(seconds: 1), (() {
       removeFromParent();
       destroyTimer?.cancel();
     }));
+  }
+
+  void stopPlane() {
+    destroy();
+    // Future.delayed(const Duration(seconds: 1), (() {
+    //   removeFromParent();
+    //   destroyTimer?.cancel();
+    // }));
+  }
+
+  void setStateToHit() {
+    _state = EnemyPlainState.hit;
+  }
+
+  void upScore() {
+    _controller.upScore(planeScore);
   }
 }

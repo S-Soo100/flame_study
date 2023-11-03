@@ -284,7 +284,7 @@ class _AirplaneGamePageState extends State<AirplaneGamePage> {
               height: 200,
               alignment: Alignment.center,
               child: Text(
-                "${readyCount.toString()}",
+                readyCount.toString(),
                 style: const TextStyle(
                     color: Colors.white,
                     fontWeight: FontWeight.bold,
