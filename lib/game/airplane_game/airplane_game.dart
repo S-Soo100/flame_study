@@ -30,9 +30,11 @@ class AirplaneGame extends FlameGame with TapCallbacks, HasCollisionDetection {
   late int sideTimerDuration;
   late int hpItemTimerDuration;
   late Timer _difficultyKeeper;
+  bool canFire = true;
 
   AirplaneGame({required this.difficulty}) : super() {
     _difficultyKeeper = Timer(120, onTick: () {
+      print("onTick");
       addNewEnemnyTimer();
     }, repeat: true);
   }
@@ -44,10 +46,13 @@ class AirplaneGame extends FlameGame with TapCallbacks, HasCollisionDetection {
   void render(Canvas canvas) {
     super.render(canvas);
     TextPaint textPaint =
-        new TextPaint(style: TextStyle(color: BasicPalette.white.color));
-    canvas.drawCircle(Offset(50, 50), 50, Paint()..color = Colors.red);
-    textPaint.render(canvas, "${_difficultyKeeper.current.toStringAsFixed(2)}",
-        Vector2.all(50));
+        TextPaint(style: TextStyle(color: BasicPalette.white.color));
+    canvas.drawCircle(const Offset(50, 50), 50, Paint()..color = Colors.red);
+    textPaint.render(
+        canvas, _difficultyKeeper.current.toStringAsFixed(2), Vector2.all(50));
+    textPaint.render(canvas, "sizeX:${size.x}", Vector2.all(30));
+    textPaint.render(canvas, "sizeX/12:${size.x / 12}", Vector2.all(40));
+    textPaint.render(canvas, "sizeX/20:${size.x / 20}", Vector2.all(60));
   }
 
   @override
@@ -61,7 +66,8 @@ class AirplaneGame extends FlameGame with TapCallbacks, HasCollisionDetection {
     await add(_gameBgSecond);
 
     _player = PlayerPlane(
-        position: Vector2(size.x / 2 - 42, size.y - 100),
+        playerSize: size.x / 9,
+        position: Vector2(size.x / 2, size.y - 100),
         hitAction: hitAction,
         onTapAction: fireBullet);
     await add(_player);
@@ -136,7 +142,7 @@ class AirplaneGame extends FlameGame with TapCallbacks, HasCollisionDetection {
   }
 
   void addEnemy() async {
-    // await add(_controller.addRandomEnemy(difficulty: difficulty, size.x));
+    await add(_controller.addRandomEnemy(difficulty: difficulty, size.x));
   }
 
   void addSideEmeny() async {
@@ -179,18 +185,27 @@ class AirplaneGame extends FlameGame with TapCallbacks, HasCollisionDetection {
   }
 
   void fireBullet() async {
-    print("Fire Bullet");
-    await add(Bullet(
-        position: Vector2(_player.position.x + 36, _player.position.y - 20)));
+    // print("Fire Bullet");
+    if (canFire) {
+      canFire = false;
+      await add(Bullet(
+          position: Vector2(_player.position.x, _player.position.y - 36)));
+      Future.delayed(const Duration(milliseconds: 333), () {
+        canFire = true;
+      });
+    }
   }
 
   void addNewEnemnyTimer() async {
-    await add(_controller.addRandomEnemy(difficulty: difficulty, size.x));
-    Async.Timer? timer =
-        Async.Timer.periodic(const Duration(milliseconds: 3000), (timer) async {
-      await add(_controller.addRandomEnemy(difficulty: difficulty, size.x));
-      if (_controller.state != Playing()) {
+    // print("new timer up");
+    // await add(_controller.addRandomEnemy(difficulty: difficulty, size.x));
+    Async.Timer.periodic(const Duration(seconds: 3), (timer) {
+      if (_controller.state is Playing) {
+        // print("new timer test");
+        add(_controller.addRandomEnemy(difficulty: difficulty, size.x));
+      } else {
         timer.cancel();
+        print('timer canceled');
       }
     });
   }
