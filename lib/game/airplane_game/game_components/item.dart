@@ -8,14 +8,14 @@ enum ItemState { falling, hit }
 class Item extends SpriteComponent with HasGameRef, CollisionCallbacks {
   ItemState _state = ItemState.falling;
   ItemState get state => _state;
-  static const double playerSize = 64.0;
+  static const double itemSize = 64.0;
   late ShapeHitbox hitbox;
   String image;
   Function action;
   late Sprite? _spirte;
 
   Item({required position, required this.image, required this.action})
-      : super(size: Vector2.all(playerSize), position: position);
+      : super(size: Vector2.all(itemSize), position: position);
 
   @override
   void onLoad() async {
@@ -27,7 +27,7 @@ class Item extends SpriteComponent with HasGameRef, CollisionCallbacks {
     position = position;
 
     final Paint defaultPaint = Paint()
-      ..color = Colors.red
+      ..color = Colors.transparent
       ..style = PaintingStyle.stroke;
     hitbox = CircleHitbox()
       ..paint = defaultPaint
@@ -53,29 +53,29 @@ class Item extends SpriteComponent with HasGameRef, CollisionCallbacks {
   ASYNC.Timer? destroyTimer;
 
   void itemAction() {
-    if (_state == ItemState.falling) {
-      _state = ItemState.hit;
-      destroy();
-      Future.delayed(const Duration(milliseconds: 500), (() {
-        destroyTimer?.cancel();
-        removeFromParent();
-        action();
-      }));
-    }
+    destroy();
+    action();
   }
 
   void destroy() async {
-    _spirte = await gameRef.loadSprite(image);
-    bool blink = false;
-    destroyTimer =
-        ASYNC.Timer.periodic(const Duration(milliseconds: 33), (timer) {
-      if (blink == true) {
-        sprite = null;
-        blink = false;
-      } else {
-        sprite = _spirte;
-        blink = true;
-      }
-    });
+    if (_state == ItemState.falling) {
+      _state = ItemState.hit;
+      _spirte = await gameRef.loadSprite(image);
+      bool blink = false;
+      destroyTimer =
+          ASYNC.Timer.periodic(const Duration(milliseconds: 33), (timer) {
+        if (blink == true) {
+          sprite = null;
+          blink = false;
+        } else {
+          sprite = _spirte;
+          blink = true;
+        }
+      });
+      Future.delayed(const Duration(milliseconds: 500), (() {
+        destroyTimer?.cancel();
+        removeFromParent();
+      }));
+    }
   }
 }

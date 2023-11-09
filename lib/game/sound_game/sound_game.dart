@@ -5,6 +5,7 @@ import 'package:flame/game.dart';
 import 'package:flame/input.dart';
 import 'package:flame/palette.dart';
 import 'package:flame_audio/flame_audio.dart';
+import 'package:flame_practice/game/slime_world/game_components/slime.dart';
 import 'package:flutter/widgets.dart' hide Animation;
 
 class SoundGame extends FlameGame with TapDetector {
@@ -14,8 +15,15 @@ class SoundGame extends FlameGame with TapDetector {
     style: TextStyle(color: BasicPalette.white.color),
   );
 
-  late AudioPool pool;
+  SoundGame() {
+    count = Timer(10, onTick: () {
+      print("ON Tick");
+    }, repeat: true);
+  }
 
+  late AudioPool pool;
+  double dtt = 0;
+  late Timer count;
   @override
   Future<void> onLoad() async {
     pool = await FlameAudio.createPool(
@@ -27,15 +35,27 @@ class SoundGame extends FlameGame with TapDetector {
   }
 
   @override
+  void update(double dt) {
+    // TODO: implement update
+    super.update(dt);
+    if (count.current == 9.999) {
+      print("HEY");
+      add(Slime(type: 0, position: Vector2.all(100)));
+    }
+    count.update(dt);
+  }
+
+  @override
   void onRemove() {
-    FlameAudio.bgm.dispose();
+    FlameAudio.bgm.stop();
+    // FlameAudio.bgm.dispose();
     super.onRemove();
   }
 
   Rect get button => Rect.fromLTWH(20, size.y - 300, size.x - 40, 200);
 
   void startBgmMusic() {
-    FlameAudio.bgm.initialize();
+    // FlameAudio.bgm.initialize();
     FlameAudio.bgm.play('music/bg_music.mp3');
   }
 
@@ -67,6 +87,9 @@ class SoundGame extends FlameGame with TapDetector {
       Vector2(size.x / 2, size.y - 200),
       anchor: Anchor.bottomCenter,
     );
+
+    text.render(
+        canvas, "count: ${count.current.toStringAsFixed(4)}", Vector2.all(20));
   }
 
   @override

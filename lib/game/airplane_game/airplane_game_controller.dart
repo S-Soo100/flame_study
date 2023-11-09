@@ -18,6 +18,8 @@ class AirplaneGameController extends GetxController {
   GameState get state => _state.value;
   final Rx<int> _score = Rx(0);
   int get score => _score.value;
+  final Rx<int> _killCount = Rx(0);
+  int get killCount => _killCount.value;
   final Rx<int> _hitPoint = Rx(5);
   int get hitPoint => _hitPoint.value;
   Rx<int> _difficulty = Rx(0);
@@ -77,7 +79,7 @@ class AirplaneGameController extends GetxController {
 
   void hit() {
     if (state is Playing) {
-      _hitPoint.value--;
+      // _hitPoint.value--;
       if (hitPoint == 0) {
         gameOver();
       }
@@ -156,4 +158,10 @@ class AirplaneGameController extends GetxController {
         position: Vector2(randomDx * 30, 0));
     _game.addHpUpItems(hpUpItem);
   }
+
+  void upKillCount() {
+    _killCount.value++;
+  }
+
+  void addNewEmenyTimer() {}
 }

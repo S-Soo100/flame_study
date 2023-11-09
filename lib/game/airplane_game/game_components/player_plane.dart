@@ -1,6 +1,8 @@
 import 'package:flame/collisions.dart';
 import 'package:flame/components.dart';
 import 'package:flame/sprite.dart';
+import 'package:flame_audio/flame_audio.dart';
+import 'package:flame_practice/game/airplane_game/game_components/bullet.dart';
 import 'package:flame_practice/game/airplane_game/game_components/enemy_plane.dart';
 import 'package:flame_practice/game/airplane_game/game_components/item.dart';
 import 'package:flame_practice/game/slime_world/game_components/slime.dart';
@@ -13,7 +15,9 @@ class PlayerPlane extends SpriteAnimationComponent
   late final SpriteAnimation _standingAnimation;
   static const double playerSize = 84.0;
   final Function hitAction;
-  PlayerPlane({required position, required this.hitAction})
+  final Function onTapAction;
+  PlayerPlane(
+      {required position, required this.hitAction, required this.onTapAction})
       : super(size: Vector2.all(playerSize), position: position);
 
   late ShapeHitbox hitbox;
@@ -55,11 +59,14 @@ class PlayerPlane extends SpriteAnimationComponent
       }
     } else if (other is EnemyPlain) {
       if (other.state == EnemyPlainState.flying) {
-        other.stopPlane();
+        other.destroy();
         hitAction();
       }
     } else if (other is Item) {
-      other.itemAction();
+      if (other.state == ItemState.falling) {
+        FlameAudio.play('airplane_game/hp_item_sound.wav');
+        other.itemAction();
+      }
     }
   }
 
@@ -75,5 +82,10 @@ class PlayerPlane extends SpriteAnimationComponent
       from: 0,
       to: 5,
     );
+  }
+
+  void fire() {
+    print("onTap Game");
+    onTapAction();
   }
 }
