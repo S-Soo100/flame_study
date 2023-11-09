@@ -2,6 +2,7 @@ import 'dart:math';
 import 'dart:async' as ASYNC;
 import 'package:flame/collisions.dart';
 import 'package:flame/components.dart';
+import 'package:flame_audio/flame_audio.dart';
 import 'package:flame_practice/game/airplane_game/airplane_game_controller.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
@@ -111,6 +112,7 @@ class EnemyPlain extends SpriteComponent with HasGameRef, CollisionCallbacks {
 
   void destroy() async {
     setStateToHit();
+    FlameAudio.play('airplane_game/hit_sound.wav');
     _spirte = await gameRef.loadSprite(planeType);
     bool blink = false;
     sprite = null;
@@ -128,14 +130,6 @@ class EnemyPlain extends SpriteComponent with HasGameRef, CollisionCallbacks {
       removeFromParent();
       destroyTimer?.cancel();
     }));
-  }
-
-  void stopPlane() {
-    destroy();
-    // Future.delayed(const Duration(seconds: 1), (() {
-    //   removeFromParent();
-    //   destroyTimer?.cancel();
-    // }));
   }
 
   void setStateToHit() {

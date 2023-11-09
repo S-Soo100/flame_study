@@ -3,9 +3,13 @@ import 'package:flutter/material.dart';
 
 class TopScoreOverlayWidget extends StatelessWidget {
   TopScoreOverlayWidget(
-      {super.key, required this.hitPoint, required this.score});
+      {super.key,
+      required this.hitPoint,
+      required this.score,
+      required this.killCount});
   int hitPoint;
   int score;
+  int killCount;
   String _score() {
     String scoreText = score.toString();
     switch (scoreText.length) {
@@ -47,7 +51,7 @@ class TopScoreOverlayWidget extends StatelessWidget {
             ),
           ),
           Container(
-            width: 180,
+            width: 280,
             height: 60,
             decoration: BoxDecoration(
               borderRadius: BorderRadius.circular(20),
@@ -55,12 +59,24 @@ class TopScoreOverlayWidget extends StatelessWidget {
               color: Colors.grey.withOpacity(0.8),
             ),
             alignment: Alignment.center,
-            child: Text(
-              "Score: ${_score()}",
-              style: const TextStyle(
-                  color: Colors.white,
-                  fontWeight: FontWeight.bold,
-                  fontSize: 20),
+            child: Column(
+              mainAxisAlignment: MainAxisAlignment.spaceAround,
+              children: [
+                Text(
+                  "Kill Count: $killCount",
+                  style: const TextStyle(
+                      color: Colors.white,
+                      fontWeight: FontWeight.bold,
+                      fontSize: 20),
+                ),
+                Text(
+                  "Score: ${_score()}",
+                  style: const TextStyle(
+                      color: Colors.white,
+                      fontWeight: FontWeight.bold,
+                      fontSize: 20),
+                ),
+              ],
             ),
           ),
         ],

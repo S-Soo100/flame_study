@@ -155,6 +155,7 @@ class _AirplaneGamePageState extends State<AirplaneGamePage> {
             child: TopScoreOverlayWidget(
               hitPoint: _controller.hitPoint,
               score: _controller.score,
+              killCount: _controller.killCount,
             ),
           ),
           if (state is GameOver) _gameOverWidget(),
