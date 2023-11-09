@@ -65,6 +65,7 @@ class AirplaneGameController extends GetxController {
     Future.delayed(const Duration(seconds: 3), () {
       _state.value = Playing();
       _score.value = 0;
+      _killCount.value = 0;
       _hitPoint.value = 5;
     });
   }
@@ -98,7 +99,9 @@ class AirplaneGameController extends GetxController {
     int randomDx = Random().nextInt(sizex ~/ 30) + 1;
     int randomSpeed = Random().nextInt(difficulty * 2 + 3) + 2;
     return EnemyPlain(
-        position: Vector2(randomDx * 30, -60), speed: randomSpeed);
+        enemySize: _game.size.x / 10,
+        position: Vector2(randomDx * 30, -60),
+        speed: randomSpeed);
   }
 
   SideEnemyPlane addRandomSideEmenyPlain(double sizex, double sizey,
@@ -110,6 +113,7 @@ class AirplaneGameController extends GetxController {
     sideEnemyPlainType type =
         randomSide ? sideEnemyPlainType.left : sideEnemyPlainType.right;
     SideEnemyPlane sidePlain = SideEnemyPlane(
+        enemySize: _game.size.x / 12,
         position: Vector2(randomSide ? -60 : sizex + 60, randomDy),
         speed: randomSpeed,
         type: type);
@@ -128,10 +132,12 @@ class AirplaneGameController extends GetxController {
     _state.value = Playing();
     _score.value = -1;
     _hitPoint.value = -1;
+    _killCount.value = 0;
   }
 
   void debugGameEnd() {
     _score.value = 0;
+    _killCount.value = 0;
     _hitPoint.value = 5;
     _state.value = Init();
     disposeAll();
@@ -151,8 +157,10 @@ class AirplaneGameController extends GetxController {
   void addHpUpItems(double sizex) {
     int randomDx = Random().nextInt(sizex ~/ 8) + 1;
     Item hpUpItem = Item(
+        itemSize: sizex / 11,
         image: 'airplane_game/items/item_hp.png',
         action: () {
+          _killCount.value = 0;
           _hitPoint.value > 0 ? _hitPoint.value++ : null;
         },
         position: Vector2(randomDx * 30, 0));
@@ -162,6 +170,4 @@ class AirplaneGameController extends GetxController {
   void upKillCount() {
     _killCount.value++;
   }
-
-  void addNewEmenyTimer() {}
 }

@@ -13,18 +13,20 @@ class PlayerPlane extends SpriteAnimationComponent
   final double _animationSpeed = 0.5;
   final double _playerSpeed = 300;
   late final SpriteAnimation _standingAnimation;
-  static const double playerSize = 84.0;
+  late final double playerSize;
   final Function hitAction;
   final Function onTapAction;
   PlayerPlane(
-      {required position, required this.hitAction, required this.onTapAction})
+      {required position,
+      required this.hitAction,
+      required this.onTapAction,
+      required this.playerSize})
       : super(size: Vector2.all(playerSize), position: position);
 
   late ShapeHitbox hitbox;
   @override
   void onLoad() async {
     super.onLoad();
-    // sprite = await gameRef.loadSprite('airplane_game/player_red_plane.png');
     position = position;
 
     final Paint defaultPaint = Paint()
@@ -36,7 +38,7 @@ class PlayerPlane extends SpriteAnimationComponent
     add(hitbox);
     await _loadAnimations();
     animation = _standingAnimation;
-    // anchor = Anchor.center;
+    anchor = Anchor.center;
   }
 
   @override
@@ -85,7 +87,7 @@ class PlayerPlane extends SpriteAnimationComponent
   }
 
   void fire() {
-    print("onTap Game");
+    // print("onTap Game");
     onTapAction();
   }
 }
