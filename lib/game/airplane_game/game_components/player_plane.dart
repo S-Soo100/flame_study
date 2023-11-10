@@ -52,10 +52,10 @@ class PlayerPlane extends SpriteAnimationComponent
     if (other is ScreenHitbox) {
       if (position.x < game.size.x) {
         if (position.x < size.x) {
-          position = Vector2(0, position.y);
+          position = Vector2(playerSize / 2, position.y);
           return;
         } else {
-          position = Vector2(game.size.x - size.x, position.y);
+          position = Vector2(game.size.x - playerSize / 2, position.y);
           return;
         }
       }

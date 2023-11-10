@@ -85,7 +85,7 @@ class EnemyPlain extends SpriteComponent with HasGameRef, CollisionCallbacks {
     }
     if (position.y + 1 > game.size.y) {
       removeFromParent();
-      _controller.upScore(planeScore);
+      // _controller.upScore(planeScore);
     }
     super.update(dt);
   }

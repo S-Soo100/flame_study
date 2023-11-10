@@ -50,7 +50,7 @@ class Bullet extends SpriteComponent with CollisionCallbacks, HasGameRef {
       // 총알 없애고
       if (other.state == EnemyPlainState.flying) {
         other.destroy();
-        _controller.upScore(other.planeScore);
+        // _controller.upScore(other.planeScore);
         _controller.upKillCount();
         removeFromParent();
       }

@@ -12,7 +12,7 @@ import 'package:flutter/foundation.dart';
 import 'package:get/get.dart';
 
 class AirplaneGameController extends GetxController {
-  // late Timer? _timer;
+  late Timer? scoreTimer;
   // late Timer? _timer2;
   final Rx<GameState> _state = Rx(Init());
   GameState get state => _state.value;
@@ -41,11 +41,26 @@ class AirplaneGameController extends GetxController {
 
   void setNewGame() {
     _game = newGameInstance();
+    setScoreTimer();
   }
 
   @override
   void onInit() {
     super.onInit();
+  }
+
+  void setScoreTimer() {
+    scoreTimer = Timer.periodic(const Duration(milliseconds: 1000), (timer) {
+      if (state is Playing) {
+        print("score up");
+        print(timer.tick);
+        _score.value = _score.value + 10;
+      }
+    });
+  }
+
+  void cancelScoreTimer() {
+    scoreTimer?.cancel();
   }
 
   @override
@@ -55,7 +70,7 @@ class AirplaneGameController extends GetxController {
 
   void upScore(int score) {
     if (state is Playing) {
-      _score.value = _score.value + score;
+      // _score.value = _score.value + score;
     }
   }
 
@@ -67,6 +82,7 @@ class AirplaneGameController extends GetxController {
       _score.value = 0;
       _killCount.value = 0;
       _hitPoint.value = 5;
+      setNewGame();
     });
   }
 
@@ -76,11 +92,12 @@ class AirplaneGameController extends GetxController {
     _hitPoint.value = 5;
     stopMusic();
     _game.cancelAllTimers();
+    cancelScoreTimer();
   }
 
   void hit() {
     if (state is Playing) {
-      // _hitPoint.value--;
+      _hitPoint.value--;
       if (hitPoint == 0) {
         gameOver();
       }
@@ -92,6 +109,7 @@ class AirplaneGameController extends GetxController {
       _state.value = GameOver();
       _game.cancelAllTimers();
       _game.stopMusic();
+      cancelScoreTimer();
     }
   }
 

@@ -12,6 +12,7 @@ import 'package:flame_practice/game/airplane_game/game_components/bullet.dart';
 import 'package:flame_practice/game/airplane_game/game_components/item.dart';
 import 'package:flame_practice/game/airplane_game/game_components/player_plane.dart';
 import 'package:flame_practice/game/airplane_game/game_components/side_enemy_plain.dart';
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
@@ -42,18 +43,18 @@ class AirplaneGame extends FlameGame with TapCallbacks, HasCollisionDetection {
   @override
   Color backgroundColor() => const Color(0xffCB815E);
 
-  @override
-  void render(Canvas canvas) {
-    super.render(canvas);
-    TextPaint textPaint =
-        TextPaint(style: TextStyle(color: BasicPalette.white.color));
-    canvas.drawCircle(const Offset(50, 50), 50, Paint()..color = Colors.red);
-    textPaint.render(
-        canvas, _difficultyKeeper.current.toStringAsFixed(2), Vector2.all(50));
-    textPaint.render(canvas, "sizeX:${size.x}", Vector2.all(30));
-    textPaint.render(canvas, "sizeX/12:${size.x / 12}", Vector2.all(40));
-    textPaint.render(canvas, "sizeX/20:${size.x / 20}", Vector2.all(60));
-  }
+  // @override
+  // void render(Canvas canvas) {
+  //   super.render(canvas);
+  //   TextPaint textPaint =
+  //       TextPaint(style: TextStyle(color: BasicPalette.white.color));
+  //   canvas.drawCircle(const Offset(50, 50), 50, Paint()..color = Colors.red);
+  //   textPaint.render(
+  //       canvas, _difficultyKeeper.current.toStringAsFixed(2), Vector2.all(36));
+  //   // textPaint.render(canvas, "sizeX:${size.x}", Vector2.all(30));
+  //   // textPaint.render(canvas, "sizeX/12:${size.x / 12}", Vector2.all(40));
+  //   // textPaint.render(canvas, "sizeX/20:${size.x / 20}", Vector2.all(60));
+  // }
 
   @override
   Future<void> onLoad() async {
@@ -152,11 +153,22 @@ class AirplaneGame extends FlameGame with TapCallbacks, HasCollisionDetection {
   }
 
   void flyLeft() {
-    _player.position = Vector2(_player.position.x - 17, _player.position.y);
+    double dx = size.x / 16;
+    _player.position = Vector2(_player.position.x - dx, _player.position.y);
+    if (_player.position.x - (_player.size.x / 2) - dx < 0) {
+      _player.position = Vector2(_player.size.x / 2, _player.position.y);
+      kDebugMode ? print("fly exception Left") : null;
+    }
   }
 
   void flyRight() {
-    _player.position = Vector2(_player.position.x + 17, _player.position.y);
+    double dx = size.x / 16;
+    _player.position = Vector2(_player.position.x + dx, _player.position.y);
+    if (_player.position.x + (_player.size.x / 2) + dx > size.x) {
+      _player.position =
+          Vector2(size.x - _player.size.x / 2, _player.position.y);
+      kDebugMode ? print("fly exception Right") : null;
+    }
   }
 
   void hitAction() {
