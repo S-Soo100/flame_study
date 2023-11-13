@@ -36,7 +36,7 @@ class HomePage extends StatelessWidget {
       padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 0),
       child: InkWell(
         onTap: () {
-          Get.to(_list.values.toList()[index]);
+          Get.to(() => _list.values.toList()[index]);
         },
         child: Container(
           width: 120,

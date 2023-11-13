@@ -8,7 +8,8 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
 class Bullet extends SpriteComponent with CollisionCallbacks, HasGameRef {
-  Bullet({required position}) : super(size: Vector2(8, 24), position: position);
+  Bullet({required position})
+      : super(size: Vector2(24, 40), position: position);
   late ShapeHitbox hitbox;
   late AirplaneGameController _controller;
 
@@ -26,6 +27,7 @@ class Bullet extends SpriteComponent with CollisionCallbacks, HasGameRef {
       ..paint = defaultPaint
       ..renderShape = true;
     add(hitbox);
+    anchor = Anchor.center;
   }
 
   @override
@@ -48,7 +50,7 @@ class Bullet extends SpriteComponent with CollisionCallbacks, HasGameRef {
       // 총알 없애고
       if (other.state == EnemyPlainState.flying) {
         other.destroy();
-        _controller.upScore(other.planeScore);
+        // _controller.upScore(other.planeScore);
         _controller.upKillCount();
         removeFromParent();
       }

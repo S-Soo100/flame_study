@@ -10,10 +10,10 @@ import 'package:get/get.dart';
 enum EnemyPlainState { flying, hit }
 
 class EnemyPlain extends SpriteComponent with HasGameRef, CollisionCallbacks {
-  static const double enemySize = 76.0;
   late AirplaneGameController _controller;
+  late double enemySize;
   final int speed;
-  EnemyPlain({required position, required this.speed})
+  EnemyPlain({required position, required this.speed, required this.enemySize})
       : super(size: Vector2.all(enemySize), position: position);
 
   late ShapeHitbox hitbox;
@@ -85,7 +85,7 @@ class EnemyPlain extends SpriteComponent with HasGameRef, CollisionCallbacks {
     }
     if (position.y + 1 > game.size.y) {
       removeFromParent();
-      _controller.upScore(planeScore);
+      // _controller.upScore(planeScore);
     }
     super.update(dt);
   }

@@ -12,6 +12,7 @@ import 'package:flame_practice/game/airplane_game/game_components/bullet.dart';
 import 'package:flame_practice/game/airplane_game/game_components/item.dart';
 import 'package:flame_practice/game/airplane_game/game_components/player_plane.dart';
 import 'package:flame_practice/game/airplane_game/game_components/side_enemy_plain.dart';
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
@@ -30,6 +31,7 @@ class AirplaneGame extends FlameGame with TapCallbacks, HasCollisionDetection {
   late int sideTimerDuration;
   late int hpItemTimerDuration;
   late Timer _difficultyKeeper;
+  bool canFire = true;
 
   AirplaneGame({required this.difficulty}) : super() {
     _difficultyKeeper = Timer(120, onTick: () {
@@ -39,16 +41,6 @@ class AirplaneGame extends FlameGame with TapCallbacks, HasCollisionDetection {
 
   @override
   Color backgroundColor() => const Color(0xffCB815E);
-
-  @override
-  void render(Canvas canvas) {
-    super.render(canvas);
-    TextPaint textPaint =
-        new TextPaint(style: TextStyle(color: BasicPalette.white.color));
-    canvas.drawCircle(Offset(50, 50), 50, Paint()..color = Colors.red);
-    textPaint.render(canvas, "${_difficultyKeeper.current.toStringAsFixed(2)}",
-        Vector2.all(50));
-  }
 
   @override
   Future<void> onLoad() async {
@@ -61,22 +53,14 @@ class AirplaneGame extends FlameGame with TapCallbacks, HasCollisionDetection {
     await add(_gameBgSecond);
 
     _player = PlayerPlane(
-        position: Vector2(size.x / 2 - 42, size.y - 100),
+        playerSize: size.x / 9,
+        position: Vector2(size.x / 2, size.y - 100),
         hitAction: hitAction,
         onTapAction: fireBullet);
     await add(_player);
 
     _setTimerDurationByDifficulty(difficulty);
     _startEnemyAddTimers();
-  }
-
-  @override
-  void onRemove() {
-    _timer?.cancel();
-    _timer2?.cancel();
-    _sidePlainTimer?.cancel();
-    // stopMusic();
-    super.onRemove();
   }
 
   @override
@@ -135,8 +119,16 @@ class AirplaneGame extends FlameGame with TapCallbacks, HasCollisionDetection {
     });
   }
 
+  void disposeTimer() {
+    _timer = Async.Timer.periodic(Duration(seconds: 1), (timer) {});
+    _timer2 = Async.Timer.periodic(Duration(seconds: 1), (timer) {});
+    _sidePlainTimer = Async.Timer.periodic(Duration(seconds: 1), (timer) {});
+    _itemTimer = Async.Timer.periodic(Duration(seconds: 1), (timer) {});
+    cancelAllTimers();
+  }
+
   void addEnemy() async {
-    // await add(_controller.addRandomEnemy(difficulty: difficulty, size.x));
+    await add(_controller.addRandomEnemy(difficulty: difficulty, size.x));
   }
 
   void addSideEmeny() async {
@@ -146,11 +138,22 @@ class AirplaneGame extends FlameGame with TapCallbacks, HasCollisionDetection {
   }
 
   void flyLeft() {
-    _player.position = Vector2(_player.position.x - 17, _player.position.y);
+    double dx = size.x / 16;
+    _player.position = Vector2(_player.position.x - dx, _player.position.y);
+    if (_player.position.x - (_player.size.x / 2) - dx < 0) {
+      _player.position = Vector2(_player.size.x / 2, _player.position.y);
+      kDebugMode ? print("fly exception Left") : null;
+    }
   }
 
   void flyRight() {
-    _player.position = Vector2(_player.position.x + 17, _player.position.y);
+    double dx = size.x / 16;
+    _player.position = Vector2(_player.position.x + dx, _player.position.y);
+    if (_player.position.x + (_player.size.x / 2) + dx > size.x) {
+      _player.position =
+          Vector2(size.x - _player.size.x / 2, _player.position.y);
+      kDebugMode ? print("fly exception Right") : null;
+    }
   }
 
   void hitAction() {
@@ -179,18 +182,27 @@ class AirplaneGame extends FlameGame with TapCallbacks, HasCollisionDetection {
   }
 
   void fireBullet() async {
-    print("Fire Bullet");
-    await add(Bullet(
-        position: Vector2(_player.position.x + 36, _player.position.y - 20)));
+    // print("Fire Bullet");
+    if (canFire) {
+      canFire = false;
+      await add(Bullet(
+          position: Vector2(_player.position.x, _player.position.y - 36)));
+      Future.delayed(const Duration(milliseconds: 333), () {
+        canFire = true;
+      });
+    }
   }
 
   void addNewEnemnyTimer() async {
-    await add(_controller.addRandomEnemy(difficulty: difficulty, size.x));
-    Async.Timer? timer =
-        Async.Timer.periodic(const Duration(milliseconds: 3000), (timer) async {
-      await add(_controller.addRandomEnemy(difficulty: difficulty, size.x));
-      if (_controller.state != Playing()) {
+    // print("new timer up");
+    // await add(_controller.addRandomEnemy(difficulty: difficulty, size.x));
+    Async.Timer.periodic(const Duration(seconds: 3), (timer) {
+      if (_controller.state is Playing) {
+        // print("new timer test");
+        add(_controller.addRandomEnemy(difficulty: difficulty, size.x));
+      } else {
         timer.cancel();
+        print('timer canceled');
       }
     });
   }

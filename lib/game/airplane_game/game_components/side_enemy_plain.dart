@@ -12,13 +12,15 @@ import 'package:get/get.dart';
 enum sideEnemyPlainType { left, right }
 
 class SideEnemyPlane extends EnemyPlain {
-  static const double enemySize = 56.0;
   final sideEnemyPlainType type;
   EnemyPlainState _state = EnemyPlainState.flying;
   EnemyPlainState get state => _state;
   late Sprite? _spirte;
   SideEnemyPlane(
-      {required super.position, required super.speed, required this.type});
+      {required super.position,
+      required super.speed,
+      required this.type,
+      required super.enemySize});
   late AirplaneGameController _controller;
 
   @override
@@ -43,11 +45,11 @@ class SideEnemyPlane extends EnemyPlain {
 
     if (type == sideEnemyPlainType.left && position.x > gameRef.size.x) {
       removeFromParent();
-      _controller.upScore(planeScore);
+      // _controller.upScore(planeScore);
       return;
     } else if (type == sideEnemyPlainType.right && position.x < 0) {
       removeFromParent();
-      _controller.upScore(planeScore);
+      // _controller.upScore(planeScore);
       return;
     }
   }

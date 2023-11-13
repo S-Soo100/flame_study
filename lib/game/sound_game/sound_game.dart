@@ -17,7 +17,7 @@ class SoundGame extends FlameGame with TapDetector {
 
   SoundGame() {
     count = Timer(10, onTick: () {
-      print("ON Tick");
+      // print("ON Tick");
     }, repeat: true);
   }
 
@@ -39,7 +39,7 @@ class SoundGame extends FlameGame with TapDetector {
     // TODO: implement update
     super.update(dt);
     if (count.current == 9.999) {
-      print("HEY");
+      // print("HEY");
       add(Slime(type: 0, position: Vector2.all(100)));
     }
     count.update(dt);
