@@ -5,6 +5,7 @@ import 'package:flame/game.dart';
 import 'package:flame_audio/flame_audio.dart';
 import 'package:flame_practice/core/state/game_state.dart';
 import 'package:flame_practice/game/airplane_game/airplane_game.dart';
+import 'package:flame_practice/game/airplane_game/game_components/airplane_game_over_widget.dart';
 import 'package:flame_practice/game/airplane_game/game_components/enemy_plane.dart';
 import 'package:flame_practice/game/airplane_game/game_components/item.dart';
 import 'package:flame_practice/game/airplane_game/game_components/side_enemy_plain.dart';
@@ -13,7 +14,6 @@ import 'package:get/get.dart';
 
 class AirplaneGameController extends GetxController {
   late Timer? scoreTimer;
-  // late Timer? _timer2;
   final Rx<GameState> _state = Rx(Init());
   GameState get state => _state.value;
   final Rx<int> _score = Rx(0);
@@ -40,8 +40,8 @@ class AirplaneGameController extends GetxController {
   }
 
   void setNewGame() {
-    _game = newGameInstance();
     setScoreTimer();
+    _game = newGameInstance();
   }
 
   @override
@@ -52,8 +52,6 @@ class AirplaneGameController extends GetxController {
   void setScoreTimer() {
     scoreTimer = Timer.periodic(const Duration(milliseconds: 1000), (timer) {
       if (state is Playing) {
-        print("score up");
-        print(timer.tick);
         _score.value = _score.value + 10;
       }
     });
@@ -91,8 +89,10 @@ class AirplaneGameController extends GetxController {
     _score.value = 0;
     _hitPoint.value = 5;
     stopMusic();
-    _game.cancelAllTimers();
-    cancelScoreTimer();
+    _game.disposeTimer();
+    try {
+      cancelScoreTimer();
+    } catch (e) {}
   }
 
   void hit() {
@@ -110,6 +110,7 @@ class AirplaneGameController extends GetxController {
       _game.cancelAllTimers();
       _game.stopMusic();
       cancelScoreTimer();
+      _showGameOverDialog();
     }
   }
 
@@ -141,6 +142,7 @@ class AirplaneGameController extends GetxController {
   }
 
   void tryAgain() {
+    print("try again");
     setNewGame();
     gameStart();
   }
@@ -187,5 +189,22 @@ class AirplaneGameController extends GetxController {
 
   void upKillCount() {
     _killCount.value++;
+  }
+
+  void _showGameOverDialog() async {
+    bool isRetry = await Get.dialog(
+        AirplaneGameOverWidget(
+          distanceMeter: score,
+          killScore: killCount,
+        ),
+        barrierDismissible: false);
+    // Get.to(AirplaneGameOverWidget(
+    //   distanceMeter: score,
+    //   killScore: killCount,
+    // ));
+    if (isRetry) {
+      setNewGame();
+      tryAgain();
+    }
   }
 }

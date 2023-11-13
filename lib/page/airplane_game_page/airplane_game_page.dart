@@ -3,6 +3,7 @@ import 'dart:async';
 import 'package:flame/game.dart';
 import 'package:flame_practice/core/state/game_state.dart';
 import 'package:flame_practice/game/airplane_game/airplane_game_controller.dart';
+import 'package:flame_practice/game/airplane_game/game_components/airplane_game_over_widget.dart';
 import 'package:flame_practice/game/airplane_game/game_components/center_overlay_widget.dart';
 import 'package:flame_practice/game/airplane_game/game_components/top_score_overlay_widget.dart';
 import 'package:flutter/material.dart';
@@ -32,7 +33,6 @@ class _AirplaneGamePageState extends State<AirplaneGamePage> {
   @override
   void dispose() {
     _controller.endGame();
-
     super.dispose();
   }
 
@@ -49,7 +49,7 @@ class _AirplaneGamePageState extends State<AirplaneGamePage> {
   }
 
   void fasd() {
-    print("tap tap tap ");
+    // print("tap tap tap ");
   }
 
   Widget _gameScreen() {
@@ -63,7 +63,7 @@ class _AirplaneGamePageState extends State<AirplaneGamePage> {
             children: <Widget>[
               Text(
                 "$diff",
-                style: TextStyle(color: Colors.white),
+                style: const TextStyle(color: Colors.white),
               ),
               Container(
                 alignment: Alignment.center,
@@ -76,20 +76,20 @@ class _AirplaneGamePageState extends State<AirplaneGamePage> {
                         onPressed: () {
                           _controller.setDifficulty(0);
                         },
-                        child: Text("쉬움")),
+                        child: const Text("쉬움")),
                     Padding(
                       padding: const EdgeInsets.symmetric(horizontal: 40),
                       child: ElevatedButton(
                           onPressed: () {
                             _controller.setDifficulty(1);
                           },
-                          child: Text("보통")),
+                          child: const Text("보통")),
                     ),
                     ElevatedButton(
                         onPressed: () {
                           _controller.setDifficulty(2);
                         },
-                        child: Text("어려움")),
+                        child: const Text("어려움")),
                   ],
                 ),
               ),
@@ -206,8 +206,19 @@ class _AirplaneGamePageState extends State<AirplaneGamePage> {
                   padding: const EdgeInsets.symmetric(horizontal: 8),
                   child: GestureDetector(
                     onTap: () {
-                      getReady();
-                      _controller.tryAgain();
+                      // Get.to(AirplaneGameOverWidget(
+                      //   distanceMeter: _controller.score,
+                      //   killScore: _controller.killCount,
+                      // ));
+
+                      Get.dialog(
+                          AirplaneGameOverWidget(
+                            distanceMeter: _controller.score,
+                            killScore: _controller.killCount,
+                          ),
+                          barrierDismissible: false);
+                      // getReady();
+                      // _controller.tryAgain();
                     },
                     child: Container(
                       width: 120,

@@ -35,26 +35,12 @@ class AirplaneGame extends FlameGame with TapCallbacks, HasCollisionDetection {
 
   AirplaneGame({required this.difficulty}) : super() {
     _difficultyKeeper = Timer(120, onTick: () {
-      print("onTick");
       addNewEnemnyTimer();
     }, repeat: true);
   }
 
   @override
   Color backgroundColor() => const Color(0xffCB815E);
-
-  // @override
-  // void render(Canvas canvas) {
-  //   super.render(canvas);
-  //   TextPaint textPaint =
-  //       TextPaint(style: TextStyle(color: BasicPalette.white.color));
-  //   canvas.drawCircle(const Offset(50, 50), 50, Paint()..color = Colors.red);
-  //   textPaint.render(
-  //       canvas, _difficultyKeeper.current.toStringAsFixed(2), Vector2.all(36));
-  //   // textPaint.render(canvas, "sizeX:${size.x}", Vector2.all(30));
-  //   // textPaint.render(canvas, "sizeX/12:${size.x / 12}", Vector2.all(40));
-  //   // textPaint.render(canvas, "sizeX/20:${size.x / 20}", Vector2.all(60));
-  // }
 
   @override
   Future<void> onLoad() async {
@@ -75,15 +61,6 @@ class AirplaneGame extends FlameGame with TapCallbacks, HasCollisionDetection {
 
     _setTimerDurationByDifficulty(difficulty);
     _startEnemyAddTimers();
-  }
-
-  @override
-  void onRemove() {
-    _timer?.cancel();
-    _timer2?.cancel();
-    _sidePlainTimer?.cancel();
-    // stopMusic();
-    super.onRemove();
   }
 
   @override
@@ -140,6 +117,14 @@ class AirplaneGame extends FlameGame with TapCallbacks, HasCollisionDetection {
         _controller.addHpUpItems(size.x);
       }
     });
+  }
+
+  void disposeTimer() {
+    _timer = Async.Timer.periodic(Duration(seconds: 1), (timer) {});
+    _timer2 = Async.Timer.periodic(Duration(seconds: 1), (timer) {});
+    _sidePlainTimer = Async.Timer.periodic(Duration(seconds: 1), (timer) {});
+    _itemTimer = Async.Timer.periodic(Duration(seconds: 1), (timer) {});
+    cancelAllTimers();
   }
 
   void addEnemy() async {
