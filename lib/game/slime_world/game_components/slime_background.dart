@@ -6,9 +6,12 @@ class SlimeBackground extends SpriteComponent with HasGameRef {
   Future<void> onLoad() async {
     super.onLoad();
     add(RectangleHitbox());
-    sprite = await gameRef.loadSprite('slime_world/slime_bg02.jpg');
+    Sprite backgroundSprite =
+        await gameRef.loadSprite('slime_world/slime_bg02.jpg');
+    sprite = backgroundSprite;
 
-    final _gSize = gameRef.size;
-    size = Vector2(_gSize.x, _gSize.y);
+    // final _gSize = gameRef.size;
+    size = Vector2(1920, 1080);
+    // backgroundSprite.originalSize.x, backgroundSprite.originalSize.y);
   }
 }

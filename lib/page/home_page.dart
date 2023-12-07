@@ -1,6 +1,7 @@
 import 'package:flame_audio/flame_audio.dart';
 import 'package:flame_practice/page/airplane_game_debug_page/airplane_game_debug_page.dart';
 import 'package:flame_practice/page/airplane_game_page/airplane_game_page.dart';
+import 'package:flame_practice/page/rotate_game/rotate_game_page.dart';
 import 'package:flame_practice/page/slime_game_page/slime_game_page.dart';
 import 'package:flame_practice/page/sound_game/sound_game_page.dart';
 import 'package:flutter/material.dart';
@@ -15,6 +16,7 @@ class HomePage extends StatelessWidget {
     "airplane_game": AirplaneGamePage(),
     "airplane_game_debug": AirplaneGameDebugPage(),
     "sound_game_debug": SoundGamePage(),
+    "rotate_game_debug": RotateGamePage(),
   };
 
   @override

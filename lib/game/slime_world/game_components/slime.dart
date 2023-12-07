@@ -53,7 +53,7 @@ class Slime extends SpriteAnimationComponent
   void update(double dt) {
     // TODO: implement update
     super.update(dt);
-    if (!hitbox.isColliding && position.y < gameRef.size.y - 200) {
+    if (position.y < gameRef.size.y) {
       position.y = position.y + 1;
     }
   }
