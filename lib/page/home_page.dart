@@ -1,8 +1,13 @@
+import 'dart:ui';
+
 import 'package:flame_audio/flame_audio.dart';
 import 'package:flame_practice/page/airplane_game_debug_page/airplane_game_debug_page.dart';
-import 'package:flame_practice/page/airplane_game_page/airplane_game_page.dart';
-import 'package:flame_practice/page/slime_game_page/slime_game_page.dart';
+import 'package:flame_practice/page/airplane_game/airplane_game_page.dart';
+import 'package:flame_practice/page/line_painting/line_painting_page.dart';
+import 'package:flame_practice/page/slime_game/slime_game_page.dart';
 import 'package:flame_practice/page/sound_game/sound_game_page.dart';
+import 'package:flame_practice/page/touch_arrow_game/touch_arrow_game.dart';
+import 'package:flame_practice/page/triangle_game/triangle_game_page.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:get/get.dart';
@@ -11,10 +16,13 @@ class HomePage extends StatelessWidget {
   HomePage({super.key});
 
   final Map<String, Widget> _list = {
-    "slime_world": SlimeGamePage(),
-    "airplane_game": AirplaneGamePage(),
-    "airplane_game_debug": AirplaneGameDebugPage(),
-    "sound_game_debug": SoundGamePage(),
+    "SlimeGamePage": const SlimeGamePage(),
+    "AirplaneGamePage": const AirplaneGamePage(),
+    "AirplaneGameDebugPage": const AirplaneGameDebugPage(),
+    "SoundGamePage": const SoundGamePage(),
+    "LinePaintingPage": const LinePaintingPage(),
+    "TouchArrowGamePage": const TouchArrowGamePage(),
+    "TriangleGamePage": const TriangleGamePage(),
   };
 
   @override
@@ -41,9 +49,16 @@ class HomePage extends StatelessWidget {
         child: Container(
           width: 120,
           height: 60,
-          color: Colors.amber,
+          color: Colors.grey[800],
           alignment: Alignment.center,
-          child: Text("${_list.keys.toList()[index]}"),
+          child: Text(
+            "${_list.keys.toList()[index]}",
+            style: TextStyle(
+                fontSize: 32,
+                color: Colors.white,
+                fontWeight: FontWeight.w600,
+                letterSpacing: 3),
+          ),
         ),
       ),
     );
