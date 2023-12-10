@@ -1,37 +1,40 @@
-import 'package:flame_practice/game/rotate_game/rotater_painter.dart';
+import 'package:flame_practice/game/line_painter/line_painter.dart';
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/src/widgets/container.dart';
 import 'package:flutter/src/widgets/framework.dart';
 import 'package:get/get.dart';
 
-class RotateGamePage extends StatefulWidget {
-  const RotateGamePage({super.key});
+class LinePaintingPage extends StatefulWidget {
+  const LinePaintingPage({super.key});
 
   @override
-  State<RotateGamePage> createState() => _RotateGamePageState();
+  State<LinePaintingPage> createState() => _LinePaintingPageState();
 }
 
-class _RotateGamePageState extends State<RotateGamePage> {
+class _LinePaintingPageState extends State<LinePaintingPage> {
   late TextEditingController _xEditingController;
   late TextEditingController _yEditingController;
 
   double x = Get.width / 2;
   double y = Get.height / 2;
 
-  late RotaterPainter _rotaterPainter;
+  late LinePainter _rotaterPainter;
   @override
   void initState() {
     // TODO: implement initState
     super.initState();
     _xEditingController = TextEditingController();
     _yEditingController = TextEditingController();
-    _rotaterPainter = RotaterPainter(x: x, y: y);
+    _rotaterPainter = LinePainter(x: x, y: y);
   }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(),
+      appBar: AppBar(
+        title: const Text("LinePainting Page"),
+      ),
       body: Center(
           child: Column(
         children: [
@@ -70,18 +73,20 @@ class _RotateGamePageState extends State<RotateGamePage> {
                 ),
                 ElevatedButton(
                     onPressed: () {
-                      print("apply");
+                      if (kDebugMode) {
+                        print("apply");
+                      }
                       _rotaterPainter.drawLine(
                           double.parse(_xEditingController.text),
                           double.parse(_yEditingController.text));
                       setState(() {});
                     },
-                    child: Text("Apply"))
+                    child: const Text("Apply"))
               ],
             ),
           ),
           //
-          SizedBox(),
+          const SizedBox(),
           Container(
               width: Get.width,
               height: Get.height * 0.8,
@@ -91,7 +96,7 @@ class _RotateGamePageState extends State<RotateGamePage> {
                 painter: _rotaterPainter,
               )),
           //
-          SizedBox()
+          const SizedBox()
         ],
       )),
     );

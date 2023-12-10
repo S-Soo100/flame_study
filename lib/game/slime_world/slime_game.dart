@@ -42,7 +42,6 @@ class SlimeGame extends FlameGame with TapCallbacks, HasCollisionDetection {
     await add(_backGround);
     TextPaint paint =
         TextPaint(style: const TextStyle(color: Colors.red, fontSize: 32));
-
     onGameResize(Vector2(_backGround.size.x, _backGround.size.y));
     _slime = Slime(type: 1, position: Vector2(size.x / 2, size.y - 200));
     // _slime2 = Slime(type: 2, position: Vector2(size.x - 200, size.y - 200));

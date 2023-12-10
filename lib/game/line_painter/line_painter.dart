@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 
-class RotaterPainter extends CustomPainter {
-  RotaterPainter({required this.x, required this.y}) {
+class LinePainter extends CustomPainter {
+  LinePainter({required this.x, required this.y}) {
     points = [Offset(x, y)];
   }
   double x;
