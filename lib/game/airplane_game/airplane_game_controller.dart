@@ -13,6 +13,8 @@ import 'package:flutter/foundation.dart';
 import 'package:get/get.dart';
 
 class AirplaneGameController extends GetxController {
+  late Timer? timeCount;
+  Rx<double> timeCountValue = Rx(0);
   late Timer? scoreTimer;
   final Rx<GameState> _state = Rx(Init());
   GameState get state => _state.value;
@@ -47,6 +49,9 @@ class AirplaneGameController extends GetxController {
   @override
   void onInit() {
     super.onInit();
+    timeCount = Timer.periodic(Duration(milliseconds: 10), (timer) {
+      timeCountValue++;
+    });
   }
 
   void setScoreTimer() {

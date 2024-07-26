@@ -13,6 +13,7 @@ class PlayerPlane extends SpriteAnimationComponent
   final double _animationSpeed = 0.5;
   final double _playerSpeed = 300;
   late final SpriteAnimation _standingAnimation;
+  late final String _spriteAnimation;
   late final double playerSize;
   final Function hitAction;
   final Function onTapAction;

@@ -13,15 +13,15 @@ class CenterOverlayWidget extends StatefulWidget {
 }
 
 class _CenterOverlayWidgetState extends State<CenterOverlayWidget> {
-  Color _left = Colors.white.withOpacity(0.5);
-  Color _right = Colors.white.withOpacity(0.5);
+  Color _left = Colors.white.withOpacity(0);
+  Color _right = Colors.white.withOpacity(0);
   late Timer? _timer;
 
   void changeLeftColor() {
     setState(() {
-      _left = Colors.redAccent.withOpacity(0.5);
+      // _left = Colors.redAccent.withOpacity(0.5);
       Future.delayed(const Duration(milliseconds: 200), () {
-        _left = Colors.white.withOpacity(0.5);
+        // _left = Colors.white.withOpacity(0.5);
         setState(() {});
       });
     });
@@ -29,9 +29,9 @@ class _CenterOverlayWidgetState extends State<CenterOverlayWidget> {
 
   void changeRightColor() {
     setState(() {
-      _right = Colors.redAccent.withOpacity(0.5);
+      // _right = Colors.redAccent.withOpacity(0.5);
       Future.delayed(const Duration(milliseconds: 200), () {
-        _right = Colors.white.withOpacity(0.5);
+        // _right = Colors.white.withOpacity(0.5);
         setState(() {});
       });
     });
@@ -58,13 +58,14 @@ class _CenterOverlayWidgetState extends State<CenterOverlayWidget> {
           child: Padding(
             padding: const EdgeInsets.all(8.0),
             child: AnimatedContainer(
-                decoration: BoxDecoration(
-                  borderRadius: BorderRadius.circular(20),
-                  color: _left,
-                ),
-                padding: const EdgeInsets.all(30),
-                duration: const Duration(milliseconds: 200),
-                child: const Text("<-")),
+              decoration: BoxDecoration(
+                borderRadius: BorderRadius.circular(20),
+                color: _left,
+              ),
+              padding: const EdgeInsets.all(30),
+              duration: const Duration(milliseconds: 200),
+              child: const Text(""),
+            ),
           ),
         ),
         GestureDetector(
@@ -83,13 +84,14 @@ class _CenterOverlayWidgetState extends State<CenterOverlayWidget> {
           child: Padding(
             padding: const EdgeInsets.all(8.0),
             child: AnimatedContainer(
-                decoration: BoxDecoration(
-                  borderRadius: BorderRadius.circular(20),
-                  color: _right,
-                ),
-                padding: const EdgeInsets.all(30),
-                duration: const Duration(milliseconds: 300),
-                child: const Text("->")),
+              decoration: BoxDecoration(
+                borderRadius: BorderRadius.circular(20),
+                color: _right,
+              ),
+              padding: const EdgeInsets.all(30),
+              duration: const Duration(milliseconds: 300),
+              child: const Text(""),
+            ),
           ),
         ),
       ],

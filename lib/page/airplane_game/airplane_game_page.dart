@@ -44,7 +44,16 @@ class _AirplaneGamePageState extends State<AirplaneGamePage> {
           title: const Text("Airplane Game"),
         ),
         body: Center(
-          child: _gameScreen(),
+          child: Stack(
+            children: [
+              _gameScreen(),
+              // Obx(() {
+              //   Timer? _t = _controller.timeCount;
+              //   String _ = _controller.timeCountValue.value.toString();
+              //   return Container(color: Colors.red, child: Text(_));
+              // })
+            ],
+          ),
         ));
   }
 
@@ -76,7 +85,7 @@ class _AirplaneGamePageState extends State<AirplaneGamePage> {
                         onPressed: () {
                           _controller.setDifficulty(0);
                         },
-                        child: const Text("쉬움")),
+                        child: Text("${_controller.timeCountValue.value}")),
                     Padding(
                       padding: const EdgeInsets.symmetric(horizontal: 40),
                       child: ElevatedButton(

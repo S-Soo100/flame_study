@@ -44,11 +44,12 @@ class AirplaneGame extends FlameGame with TapCallbacks, HasCollisionDetection {
 
   @override
   Future<void> onLoad() async {
+    //
     _controller = Get.find<AirplaneGameController>();
 
     add(ScreenHitbox());
 
-    await add(_gameBg);
+    await add(_gameBg); // 배경이미지 깔기
     _gameBgSecond.position = Vector2(0, -size.y);
     await add(_gameBgSecond);
 
