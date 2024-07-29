@@ -137,6 +137,6 @@ class EnemyPlain extends SpriteComponent with HasGameRef, CollisionCallbacks {
   }
 
   void upScore() {
-    _controller.upScore(planeScore);
+    // _controller.upScore(planeScore);
   }
 }

@@ -1,17 +1,14 @@
-import 'dart:async' as Async;
-import 'package:flame/collisions.dart';
+import 'package:flame/components.dart';
 import 'package:flame/experimental.dart';
 import 'package:flame/game.dart';
 import 'package:flame/palette.dart';
-import 'package:flame/timer.dart';
 import 'package:flame_audio/flame_audio.dart';
-import 'package:flame_practice/core/state/game_state.dart';
 import 'package:flame_practice/game/airplane_game/airplane_game_controller.dart';
 import 'package:flame_practice/game/airplane_game/game_components/airplane_game_bg.dart';
-import 'package:flame_practice/game/airplane_game/game_components/bullet.dart';
-import 'package:flame_practice/game/airplane_game/game_components/item.dart';
+import 'package:flame_practice/game/airplane_game/game_components/enemy_components/phase1_enemy_component.dart';
+import 'package:flame_practice/game/airplane_game/game_components/enemy_components/phase2_enemy_component.dart';
+import 'package:flame_practice/game/airplane_game/game_components/enemy_components/phase3_enemy_component.dart';
 import 'package:flame_practice/game/airplane_game/game_components/player_plane.dart';
-import 'package:flame_practice/game/airplane_game/game_components/side_enemy_plain.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
@@ -19,123 +16,149 @@ import 'package:get/get.dart';
 class AirplaneGame extends FlameGame with TapCallbacks, HasCollisionDetection {
   final AirplaneGameBg _gameBg = AirplaneGameBg(type: 0);
   final AirplaneGameBg _gameBgSecond = AirplaneGameBg(type: 1);
-  late AirplaneGameController _controller;
-  late Async.Timer? _timer;
-  late Async.Timer? _timer2;
-  late Async.Timer? _sidePlainTimer;
-  late Async.Timer? _itemTimer;
-  late PlayerPlane _player;
-  int difficulty;
-  late int firstTimerDuration;
-  late int secondTimerDuration;
-  late int sideTimerDuration;
-  late int hpItemTimerDuration;
-  late Timer _difficultyKeeper;
   bool canFire = true;
 
-  AirplaneGame({required this.difficulty}) : super() {
-    _difficultyKeeper = Timer(120, onTick: () {
-      addNewEnemnyTimer();
-    }, repeat: true);
-  }
+  final double phaseTime = 20;
+  final int phaseEnemyAmount = 10;
+  final double phaseEndTime = 25;
+  late AirplaneGameController _controller;
+  late PlayerPlane _player;
+  late Timer? _phase1Timer;
+  late Timer? _phase2Timer;
+  late Timer? _phase3Timer;
+  late List<Phase1EnemyComponent> phase1Enemies;
+  late List<Phase2EnemyComponent> phase2Enemies;
+  late List<Phase3EnemyComponent> phase3Enemies;
+
+  AirplaneGame() : super();
 
   @override
   Color backgroundColor() => const Color(0xffCB815E);
 
   @override
   Future<void> onLoad() async {
-    //
     _controller = Get.find<AirplaneGameController>();
-
     add(ScreenHitbox());
 
-    await add(_gameBg); // 배경이미지 깔기
+    await add(_gameBg);
     _gameBgSecond.position = Vector2(0, -size.y);
     await add(_gameBgSecond);
 
     _player = PlayerPlane(
-        playerSize: size.x / 9,
-        position: Vector2(size.x / 2, size.y - 100),
-        hitAction: hitAction,
-        onTapAction: fireBullet);
+      playerSize: 50,
+      position: Vector2(size.x / 2, size.y - 100),
+      hitAction: hitAction,
+    );
     await add(_player);
-
-    _setTimerDurationByDifficulty(difficulty);
-    _startEnemyAddTimers();
+    setEnemyArray();
+    setTimers();
+    // overlays.add('score');
+    // overlays.add('score2');
+    // overlays.add('score3');
   }
 
   @override
   void update(double dt) async {
     super.update(dt);
-    if (_controller.state is Playing) {
-      _difficultyKeeper.update(dt);
+    updateActionByPhase(dt);
+  }
+
+  void updateActionByPhase(double dt) {
+    switch (_controller.phase) {
+      case AirplaneGamePhase.phaseFirst:
+        firstPhase(dt);
+        return;
+      case AirplaneGamePhase.phaseSecond:
+        secondPhase(dt);
+        return;
+      case AirplaneGamePhase.phaseThird:
+        thirdPhase(dt);
+        return;
+      case AirplaneGamePhase.phaseFourth:
+        fourthPhase(dt);
+        return;
+      default:
+        return;
     }
   }
 
-  @override
-  void onTapUp(TapUpEvent event) {
-    // TODO: implement onTapUp
-    super.onTapUp(event);
-    _player.fire();
+  void setEnemyArray() {
+    phase1Enemies = List.generate(
+        10, (index) => Phase1EnemyComponent(Vector2(0, 500), id: index));
+    phase2Enemies = List.generate(
+        10, (index) => Phase2EnemyComponent(Vector2(size.x, 500), id: index));
+    phase3Enemies = List.generate(
+        10, (index) => Phase3EnemyComponent(Vector2(0, 500), id: index));
   }
+
+  void setTimers() {
+    _phase1Timer = Timer(1, onTick: createPhase1Enemy, repeat: true);
+    _phase2Timer = Timer(1, onTick: createPhase2Enemy, repeat: true);
+    _phase3Timer = Timer(1, onTick: createPhase3Enemy, repeat: true);
+  }
+
+  double phase1EnemyCount = 0;
+  void createPhase1Enemy() {
+    if (phase1EnemyCount < phaseEnemyAmount) {
+      add(phase1Enemies[phase1EnemyCount.toInt()]);
+      phase1EnemyCount++;
+      // return;
+    } else {
+      phase1EnemyCount++;
+    }
+    if (phase1EnemyCount > phaseEndTime) {
+      _phase1Timer?.stop();
+      phase1EnemyCount = 0;
+      _controller.setAirplaneGamePhase(AirplaneGamePhase.phaseSecond);
+    }
+  }
+
+  double phase2EnemyCount = 0;
+  void createPhase2Enemy() {
+    if (phase2EnemyCount < phaseEnemyAmount) {
+      add(phase2Enemies[phase2EnemyCount.toInt()]);
+      phase2EnemyCount++;
+      // return;
+    } else {
+      phase2EnemyCount++;
+    }
+    if (phase2EnemyCount > phaseEndTime) {
+      _controller.setAirplaneGamePhase(AirplaneGamePhase.phaseThird);
+    }
+  }
+
+  double phase3EnemyCount = 0;
+  void createPhase3Enemy() {
+    if (phase3EnemyCount < phaseEnemyAmount) {
+      add(phase3Enemies[phase3EnemyCount.toInt()]);
+      phase3EnemyCount++;
+      // return;
+    } else {
+      phase3EnemyCount++;
+    }
+    if (phase3EnemyCount > phaseEndTime) {
+      _controller.setAirplaneGamePhase(AirplaneGamePhase.phaseFourth);
+    }
+  }
+
+  void firstPhase(double dt) {
+    _phase1Timer?.update(dt);
+  }
+
+  void secondPhase(double dt) {
+    _phase2Timer?.update(dt);
+  }
+
+  void thirdPhase(double dt) {
+    _phase3Timer?.update(dt);
+  }
+
+  void fourthPhase(double dt) {}
 
   @override
-  void onTapDown(TapDownEvent event) {
-    // TODO: implement onTapDown
-    super.onTapDown(event);
-  }
-
-  void _setTimerDurationByDifficulty(int difficulty) {
-    int diff = 3 - difficulty;
-    firstTimerDuration = (diff * 1000) + 1100;
-    secondTimerDuration = (diff * 1000) + 1700;
-    sideTimerDuration = (diff * 1000) + 2600;
-    hpItemTimerDuration = (diff * 1000) + 10000;
-  }
-
-  void _startEnemyAddTimers() {
-    _timer = Async.Timer.periodic(Duration(milliseconds: firstTimerDuration),
-        (timer) {
-      if (_controller.state is Playing) {
-        addEnemy();
-      }
-    });
-    _timer2 = Async.Timer.periodic(Duration(milliseconds: secondTimerDuration),
-        (timer) {
-      if (_controller.state is Playing) {
-        addEnemy();
-      }
-    });
-    _sidePlainTimer = Async.Timer.periodic(
-        Duration(milliseconds: sideTimerDuration), (timer) {
-      if (_controller.state is Playing) {
-        addSideEmeny();
-      }
-    });
-    _itemTimer = Async.Timer.periodic(
-        Duration(milliseconds: hpItemTimerDuration), (timer) {
-      if (_controller.state is Playing) {
-        _controller.addHpUpItems(size.x);
-      }
-    });
-  }
-
-  void disposeTimer() {
-    _timer = Async.Timer.periodic(Duration(seconds: 1), (timer) {});
-    _timer2 = Async.Timer.periodic(Duration(seconds: 1), (timer) {});
-    _sidePlainTimer = Async.Timer.periodic(Duration(seconds: 1), (timer) {});
-    _itemTimer = Async.Timer.periodic(Duration(seconds: 1), (timer) {});
-    cancelAllTimers();
-  }
-
-  void addEnemy() async {
-    await add(_controller.addRandomEnemy(difficulty: difficulty, size.x));
-  }
-
-  void addSideEmeny() async {
-    SideEnemyPlane plane = _controller.addRandomSideEmenyPlain(
-        difficulty: difficulty, size.x, size.y);
-    await add(plane);
+  void onRemove() {
+    _phase1Timer?.stop();
+    super.onRemove();
   }
 
   void flyLeft() {
@@ -158,53 +181,18 @@ class AirplaneGame extends FlameGame with TapCallbacks, HasCollisionDetection {
   }
 
   void hitAction() {
-    _controller.hit();
-  }
-
-  void cancelAllTimers() {
-    _timer?.cancel();
-    _timer2?.cancel();
-    _sidePlainTimer?.cancel();
-    _itemTimer?.cancel();
+    // _controller.hit();
   }
 
   void stopMusic() {
     FlameAudio.bgm.stop();
-    // FlameAudio.bgm.dispose();
   }
 
   void playBgm() {
-    // FlameAudio.bgm.initialize();
     FlameAudio.bgm.play('airplane_game/bg_music.mp3');
   }
 
-  void addHpUpItems(Item item) async {
-    await add(item);
-  }
-
-  void fireBullet() async {
-    // print("Fire Bullet");
-    if (canFire) {
-      canFire = false;
-      await add(Bullet(
-          position: Vector2(_player.position.x, _player.position.y - 36)));
-      Future.delayed(const Duration(milliseconds: 333), () {
-        canFire = true;
-      });
-    }
-  }
-
-  void addNewEnemnyTimer() async {
-    // print("new timer up");
-    // await add(_controller.addRandomEnemy(difficulty: difficulty, size.x));
-    Async.Timer.periodic(const Duration(seconds: 3), (timer) {
-      if (_controller.state is Playing) {
-        // print("new timer test");
-        add(_controller.addRandomEnemy(difficulty: difficulty, size.x));
-      } else {
-        timer.cancel();
-        print('timer canceled');
-      }
-    });
+  Vector2 getPlayerPosition() {
+    return _player.position;
   }
 }

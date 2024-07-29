@@ -32,7 +32,6 @@ class _AirplaneGamePageState extends State<AirplaneGamePage> {
 
   @override
   void dispose() {
-    _controller.endGame();
     super.dispose();
   }
 
@@ -64,44 +63,11 @@ class _AirplaneGamePageState extends State<AirplaneGamePage> {
   Widget _gameScreen() {
     return Obx(() {
       GameState state = _controller.state;
-      int diff = _controller.difficulty;
       if (state is Init) {
         return Center(
           child: Column(
             mainAxisAlignment: MainAxisAlignment.center,
             children: <Widget>[
-              Text(
-                "$diff",
-                style: const TextStyle(color: Colors.white),
-              ),
-              Container(
-                alignment: Alignment.center,
-                width: Get.width,
-                height: 60,
-                child: Row(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children: [
-                    ElevatedButton(
-                        onPressed: () {
-                          _controller.setDifficulty(0);
-                        },
-                        child: Text("${_controller.timeCountValue.value}")),
-                    Padding(
-                      padding: const EdgeInsets.symmetric(horizontal: 40),
-                      child: ElevatedButton(
-                          onPressed: () {
-                            _controller.setDifficulty(1);
-                          },
-                          child: const Text("보통")),
-                    ),
-                    ElevatedButton(
-                        onPressed: () {
-                          _controller.setDifficulty(2);
-                        },
-                        child: const Text("어려움")),
-                  ],
-                ),
-              ),
               const Text(
                 "Airplane Game",
                 style: TextStyle(

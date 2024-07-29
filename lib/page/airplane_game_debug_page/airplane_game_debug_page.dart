@@ -1,11 +1,7 @@
 import 'dart:async';
 
 import 'package:flame/game.dart';
-import 'package:flame_practice/core/state/game_state.dart';
-import 'package:flame_practice/game/airplane_game/airplane_game.dart';
 import 'package:flame_practice/game/airplane_game/airplane_game_controller.dart';
-import 'package:flame_practice/game/airplane_game/game_components/center_overlay_widget.dart';
-import 'package:flame_practice/game/airplane_game/game_components/top_score_overlay_widget.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
@@ -25,7 +21,6 @@ class _AirplaneGameDebugPageState extends State<AirplaneGameDebugPage> {
 
   @override
   void initState() {
-    // TODO: implement initState
     super.initState();
     _controller = Get.find<AirplaneGameController>();
     _controller.debugGameStart();
@@ -34,7 +29,6 @@ class _AirplaneGameDebugPageState extends State<AirplaneGameDebugPage> {
 
   @override
   void dispose() {
-    // TODO: implement dispose
     _controller.debugGameEnd();
     super.dispose();
   }
@@ -47,7 +41,35 @@ class _AirplaneGameDebugPageState extends State<AirplaneGameDebugPage> {
           title: const Text("Debug Page"),
         ),
         body: Center(
-          child: GameWidget(game: _controller.game),
+          child: GameWidget(
+            game: _controller.game,
+            overlayBuilderMap: {
+              'score': (context, game) {
+                return Container(
+                  width: 100,
+                  height: 100,
+                  color: Colors.red,
+                );
+              },
+              'score2': (context, game) {
+                return Align(
+                  alignment: Alignment.center,
+                  child: Container(
+                    width: 100,
+                    height: 100,
+                    color: Colors.blue,
+                  ),
+                );
+              },
+              'score3': (context, game) {
+                return Container(
+                  width: 100,
+                  height: 100,
+                  color: Colors.blue,
+                );
+              },
+            },
+          ),
         ));
   }
 }
