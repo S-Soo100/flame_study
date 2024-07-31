@@ -26,7 +26,7 @@ class Phase2EnemyComponent extends SpriteComponent
   Future<void> onLoad() async {
     super.onLoad();
     size = setComponentSizeByGame(gameRef);
-    position = Vector2(gameRef.size.x, 500);
+    position = Vector2(gameRef.size.x, gameRef.size.y * 0.8 - 50);
     radius = gameRef.size.y * 0.3;
     anchor = Anchor.center;
     sprite = await gameRef.loadSprite('airplane_game/enemies/ship_0007.png');
@@ -82,11 +82,11 @@ class Phase2EnemyComponent extends SpriteComponent
   }
 
   void secondPattern(double dt) {
-    if (position.x > gameRef.size.x * 0.75) {
+    if (position.x > gameRef.size.x * 0.8) {
       phaseChange();
       return;
     }
-    position.lerp(Vector2(gameRef.size.x + 20, gameRef.size.y / 2), dt);
+    position.lerp(Vector2(gameRef.size.x + 10, gameRef.size.y / 2), dt);
   }
 
   bool isDead() {

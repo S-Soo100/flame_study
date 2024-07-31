@@ -26,7 +26,7 @@ class Phase3EnemyComponent extends SpriteComponent
   Future<void> onLoad() async {
     super.onLoad();
     size = setComponentSizeByGame(gameRef);
-    position = Vector2(0, 500);
+    position = Vector2(0, gameRef.size.y * 0.8 - 50);
     radius = gameRef.size.y * 0.3;
     anchor = Anchor.center;
     sprite = await gameRef.loadSprite('airplane_game/enemies/ship_0006.png');
@@ -36,6 +36,9 @@ class Phase3EnemyComponent extends SpriteComponent
     }, repeat: false);
   }
 
+  double amplitude = 100.0;
+  double frequency = 1.0;
+  double time = 0.0;
   @override
   void update(double dt) {
     super.update(dt);
@@ -72,19 +75,23 @@ class Phase3EnemyComponent extends SpriteComponent
   }
 
   void firstPattern(double dt) {
-    if (position.x < gameRef.size.x * 0.1) {
+    if (position.x > gameRef.size.x * 0.51) {
       phaseChange();
       return;
     }
-    position.x -= speed * 8;
+    position.x += speed * 8;
   }
 
   void secondPattern(double dt) {
-    if (position.x > gameRef.size.x * 0.75) {
+    if (position.y < gameRef.size.y * 0.3) {
       phaseChange();
       return;
     }
-    position.lerp(Vector2(gameRef.size.x * 0.8, gameRef.size.y / 2), dt);
+
+    time += dt;
+    // 좌우 움직임
+    position.x = game.size.x / 2 + math.sin(time * frequency) * amplitude;
+    position.y -= time / 2;
   }
 
   bool isDead() {

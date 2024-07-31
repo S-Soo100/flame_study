@@ -8,8 +8,7 @@ import 'package:flutter/foundation.dart';
 
 class Phase4EnemyComponent extends SpriteComponent
     with CollisionCallbacks, HasGameRef<AirplaneGame>, EmenyComponentMixin {
-  Phase4EnemyComponent(Vector2 position, {required this.id}) : super() {
-    this.position = position;
+  Phase4EnemyComponent({required this.id}) : super() {
     id = id;
   }
   int id;
@@ -26,6 +25,7 @@ class Phase4EnemyComponent extends SpriteComponent
   @override
   Future<void> onLoad() async {
     super.onLoad();
+    position = Vector2(gameRef.size.x, gameRef.size.y * 0.8 - 50);
     angle = 0;
     size = setComponentSizeByGame(gameRef);
     radius = gameRef.size.y * 0.3;
@@ -33,10 +33,12 @@ class Phase4EnemyComponent extends SpriteComponent
     sprite = await gameRef.loadSprite('airplane_game/enemies/ship_0002.png');
     shootTimer = Timer(3, onTick: () => {shoot(game, position)}, repeat: true);
     chargeTimer = Timer(15, onTick: () {
-      _pattern = 3;
+      _pattern = 4;
     }, repeat: false);
   }
 
+  double frequency = 1.0;
+  double time = 1;
   @override
   void update(double dt) {
     super.update(dt);
@@ -62,9 +64,12 @@ class Phase4EnemyComponent extends SpriteComponent
         secondPattern(dt);
         return;
       case 2:
-        groupingPattern(game, dt, position: position, id: id, y: size.y);
+        thirdPattern(dt);
         return;
       case 3:
+        groupingPattern(game, dt, position: position, id: id, y: size.y);
+        return;
+      case 4:
         chargePattern(game, position, dt);
         return;
       default:
@@ -78,14 +83,25 @@ class Phase4EnemyComponent extends SpriteComponent
       return;
     }
     position.x -= speed * 8;
+    position.y--;
   }
 
   void secondPattern(double dt) {
-    if (position.x > gameRef.size.x * 0.75) {
+    if (position.y < gameRef.size.y * 0.3) {
       phaseChange();
       return;
     }
-    position.lerp(Vector2(gameRef.size.x * 0.8, gameRef.size.y / 2), dt);
+    time += dt;
+    position.x += math.sin((time - 1) * frequency);
+    position.y -= time;
+  }
+
+  void thirdPattern(double dt) {
+    if (position.y > gameRef.size.y * 0.8) {
+      phaseChange();
+      return;
+    }
+    position.lerp(Vector2(game.size.x, game.size.y * 0.9), dt);
   }
 
   bool isDead() {
