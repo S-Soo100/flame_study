@@ -4,13 +4,21 @@ import 'package:flame/components.dart';
 import 'package:flame_practice/core/state/game_state.dart';
 import 'package:flame_practice/game/airplane_game/airplane_game.dart';
 import 'package:flame_practice/game/airplane_game/game_components/airplane_game_over_widget.dart';
-import 'package:flame_practice/game/airplane_game/game_components/enemy_components/phase1_enemy_component.dart';
 import 'package:get/get.dart';
 
-enum AirplaneGamePhase { phaseFirst, phaseSecond, phaseThird, phaseFourth }
+enum AirplaneGamePhase {
+  init,
+  phase1,
+  phase2,
+  phase3,
+  phase4,
+  phase5,
+  phase6,
+  phase7
+}
 
 class AirplaneGameController extends GetxController {
-  AirplaneGamePhase _phase = AirplaneGamePhase.phaseFirst;
+  AirplaneGamePhase _phase = AirplaneGamePhase.init;
   void setAirplaneGamePhase(AirplaneGamePhase newPhase) {
     _phase = newPhase;
   }
@@ -47,7 +55,7 @@ class AirplaneGameController extends GetxController {
 
   void setNewGame() {
     _game = newGameInstance();
-    _phase = AirplaneGamePhase.phaseFirst;
+    _phase = AirplaneGamePhase.phase1;
   }
 
   @override

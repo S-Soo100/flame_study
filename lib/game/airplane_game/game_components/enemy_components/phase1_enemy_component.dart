@@ -8,9 +8,7 @@ import 'package:flutter/foundation.dart';
 
 class Phase1EnemyComponent extends SpriteComponent
     with CollisionCallbacks, HasGameRef<AirplaneGame>, EmenyComponentMixin {
-  Phase1EnemyComponent(Vector2 position, {required this.id})
-      : super(size: Vector2(50, 50)) {
-    this.position = position;
+  Phase1EnemyComponent({required this.id}) : super() {
     id = id;
   }
   int id;
@@ -27,7 +25,8 @@ class Phase1EnemyComponent extends SpriteComponent
   @override
   Future<void> onLoad() async {
     super.onLoad();
-    angle = 0;
+    size = setComponentSizeByGame(gameRef);
+    position = Vector2(0, gameRef.size.y * 0.8 - 50);
     radius = gameRef.size.y * 0.3;
     anchor = Anchor.center;
     sprite = await gameRef.loadSprite('airplane_game/enemies/ship_0004.png');
@@ -59,10 +58,10 @@ class Phase1EnemyComponent extends SpriteComponent
         firstPattern(dt);
         return;
       case 1:
-        secondPattern(dt);
+        groupingPattern(game, dt, position: position, id: id, y: size.y);
         return;
       case 2:
-        finalPattern(game, position, dt);
+        chargePattern(game, position, dt);
         return;
       default:
         return;
@@ -75,16 +74,6 @@ class Phase1EnemyComponent extends SpriteComponent
       return;
     }
     position.x += speed * 8;
-  }
-
-  void secondPattern(double dt) {
-    double _y = gameRef.size.y * 0.2;
-    double _x = (gameRef.size.x / 2 - 120) + (60 * id);
-    if (id > 4) {
-      _y += 60;
-      _x -= 300;
-    }
-    position.lerp(Vector2(_x, _y), dt);
   }
 
   bool isDead() {

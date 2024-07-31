@@ -6,9 +6,10 @@ import 'package:flame_practice/game/airplane_game/airplane_game.dart';
 import 'package:flame_practice/game/airplane_game/game_components/enemy_components/enemy_components_mixin.dart';
 import 'package:flutter/foundation.dart';
 
-class Phase2EnemyComponent extends SpriteComponent
+class Phase7EnemyComponent extends SpriteComponent
     with CollisionCallbacks, HasGameRef<AirplaneGame>, EmenyComponentMixin {
-  Phase2EnemyComponent({required this.id}) : super() {
+  Phase7EnemyComponent(Vector2 position, {required this.id}) : super() {
+    this.position = position;
     id = id;
   }
   int id;
@@ -25,12 +26,12 @@ class Phase2EnemyComponent extends SpriteComponent
   @override
   Future<void> onLoad() async {
     super.onLoad();
+    angle = 0;
     size = setComponentSizeByGame(gameRef);
-    position = Vector2(gameRef.size.x, 500);
     radius = gameRef.size.y * 0.3;
     anchor = Anchor.center;
-    sprite = await gameRef.loadSprite('airplane_game/enemies/ship_0007.png');
-    shootTimer = Timer(4, onTick: () => {shoot(game, position)}, repeat: true);
+    sprite = await gameRef.loadSprite('airplane_game/enemies/ship_0006.png');
+    shootTimer = Timer(3, onTick: () => {shoot(game, position)}, repeat: true);
     chargeTimer = Timer(15, onTick: () {
       _pattern = 3;
     }, repeat: false);
@@ -43,8 +44,6 @@ class Phase2EnemyComponent extends SpriteComponent
     chargeTimer!.update(dt);
 
     if (isDead()) {
-      shootTimer!.stop();
-      chargeTimer!.stop();
       removeFromParent();
     }
     updateActionByPhase(dt);
@@ -86,7 +85,7 @@ class Phase2EnemyComponent extends SpriteComponent
       phaseChange();
       return;
     }
-    position.lerp(Vector2(gameRef.size.x + 20, gameRef.size.y / 2), dt);
+    position.lerp(Vector2(gameRef.size.x * 0.8, gameRef.size.y / 2), dt);
   }
 
   bool isDead() {
