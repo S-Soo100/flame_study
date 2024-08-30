@@ -12,7 +12,7 @@ Flutter Flame은 2D로 구현하는 플러터 게임 엔진 입니다.
 혹은, 게임같은 앱을 만들거나 부분적으로 적용하는 것도 가능하다고 생각합니다만, Flame쪽 기능을 궁금해 하는 사람이 있을지 모르겠습니다.
 그래서 크게 알려지지 않겠지만 조금씩 Velog에도 내용을 정리해 보겠습니다.
 
-![삼각함수](https://github.com/user-attachments/assets/37e52125-585d-4360-b928-26cdd64019bd)
+![Aug-30-2024 10-05-05](https://github.com/user-attachments/assets/ceee4599-042d-4c68-b7fd-37da7492ab41)
 ![Aug-30-2024 10-03-37](https://github.com/user-attachments/assets/c1862115-5fbb-4007-9eff-2780ce644c29)
 ![Aug-30-2024 10-04-11](https://github.com/user-attachments/assets/9c66dbe3-8f70-41be-82cc-a0c67037e6f4)
 
