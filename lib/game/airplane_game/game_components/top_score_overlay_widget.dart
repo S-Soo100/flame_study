@@ -64,7 +64,7 @@ class TopScoreOverlayWidget extends StatelessWidget {
             decoration: BoxDecoration(
               borderRadius: BorderRadius.circular(20),
               border: Border.all(color: Colors.white, width: 1),
-              color: Colors.white.withOpacity(0.4),
+              color: Colors.white.withOpacity(0.1),
             ),
             alignment: Alignment.center,
             child: Text(

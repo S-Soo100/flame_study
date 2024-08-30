@@ -1,18 +1,32 @@
 import 'dart:async';
-import 'dart:math';
 
-import 'package:flame/game.dart';
-import 'package:flame_audio/flame_audio.dart';
+import 'package:flame/components.dart';
 import 'package:flame_practice/core/state/game_state.dart';
 import 'package:flame_practice/game/airplane_game/airplane_game.dart';
 import 'package:flame_practice/game/airplane_game/game_components/airplane_game_over_widget.dart';
-import 'package:flame_practice/game/airplane_game/game_components/enemy_plane.dart';
-import 'package:flame_practice/game/airplane_game/game_components/item.dart';
-import 'package:flame_practice/game/airplane_game/game_components/side_enemy_plain.dart';
-import 'package:flutter/foundation.dart';
 import 'package:get/get.dart';
 
+enum AirplaneGamePhase {
+  init,
+  phase1,
+  phase2,
+  phase3,
+  phase4,
+  phase5,
+  phase6,
+  phase7
+}
+
 class AirplaneGameController extends GetxController {
+  AirplaneGamePhase _phase = AirplaneGamePhase.init;
+  void setAirplaneGamePhase(AirplaneGamePhase newPhase) {
+    _phase = newPhase;
+  }
+
+  AirplaneGamePhase get phase => _phase;
+
+  late Timer? timeCount;
+  Rx<double> timeCountValue = Rx(0);
   late Timer? scoreTimer;
   final Rx<GameState> _state = Rx(Init());
   GameState get state => _state.value;
@@ -36,29 +50,18 @@ class AirplaneGameController extends GetxController {
   AirplaneGame get game => _game;
 
   AirplaneGame newGameInstance() {
-    return AirplaneGame(difficulty: _difficulty.value);
+    return AirplaneGame();
   }
 
   void setNewGame() {
-    setScoreTimer();
     _game = newGameInstance();
+    //todo debuggggggggggggggggggg
+    _phase = AirplaneGamePhase.phase5; //! debuging
   }
 
   @override
   void onInit() {
     super.onInit();
-  }
-
-  void setScoreTimer() {
-    scoreTimer = Timer.periodic(const Duration(milliseconds: 1000), (timer) {
-      if (state is Playing) {
-        _score.value = _score.value + 10;
-      }
-    });
-  }
-
-  void cancelScoreTimer() {
-    scoreTimer?.cancel();
   }
 
   @override
@@ -89,10 +92,6 @@ class AirplaneGameController extends GetxController {
     _score.value = 0;
     _hitPoint.value = 5;
     stopMusic();
-    _game.disposeTimer();
-    try {
-      cancelScoreTimer();
-    } catch (e) {}
   }
 
   void hit() {
@@ -107,38 +106,9 @@ class AirplaneGameController extends GetxController {
   void gameOver() {
     if (state is Playing) {
       _state.value = GameOver();
-      _game.cancelAllTimers();
       _game.stopMusic();
-      cancelScoreTimer();
       _showGameOverDialog();
     }
-  }
-
-  EnemyPlain addRandomEnemy(double sizex, {required int difficulty}) {
-    int randomDx = Random().nextInt(sizex ~/ 30) + 1;
-    int randomSpeed = Random().nextInt(difficulty * 2 + 3) + 2;
-    return EnemyPlain(
-        enemySize: _game.size.x / 10,
-        position: Vector2(randomDx * 30, -60),
-        speed: randomSpeed);
-  }
-
-  SideEnemyPlane addRandomSideEmenyPlain(double sizex, double sizey,
-      {required int difficulty}) {
-    double randomInt = Random().nextDouble() * 0.1;
-    double randomDy = randomInt * sizey; // 화면 위에서 15% 이내
-    int randomSpeed = Random().nextInt(difficulty * 2 + 3) + 2;
-    bool randomSide = Random().nextBool();
-    sideEnemyPlainType type =
-        randomSide ? sideEnemyPlainType.left : sideEnemyPlainType.right;
-    SideEnemyPlane sidePlain = SideEnemyPlane(
-        enemySize: _game.size.x / 12,
-        position: Vector2(randomSide ? -60 : sizex + 60, randomDy),
-        speed: randomSpeed,
-        type: type);
-    sidePlain.angle = randomSide ? -0.25 * pi : 0.25 * pi;
-    sidePlain.size = Vector2.all(60);
-    return sidePlain;
   }
 
   void tryAgain() {
@@ -160,31 +130,11 @@ class AirplaneGameController extends GetxController {
     _killCount.value = 0;
     _hitPoint.value = 5;
     _state.value = Init();
-    disposeAll();
     setNewGame();
-  }
-
-  void disposeAll() {
-    kDebugMode ? print("dispose all timers") : null;
-    // stopMusic();
-    _game.cancelAllTimers();
   }
 
   void stopMusic() {
     _game.stopMusic();
-  }
-
-  void addHpUpItems(double sizex) {
-    int randomDx = Random().nextInt(sizex ~/ 8) + 1;
-    Item hpUpItem = Item(
-        itemSize: sizex / 11,
-        image: 'airplane_game/items/item_hp.png',
-        action: () {
-          _killCount.value = 0;
-          _hitPoint.value > 0 ? _hitPoint.value++ : null;
-        },
-        position: Vector2(randomDx * 30, 0));
-    _game.addHpUpItems(hpUpItem);
   }
 
   void upKillCount() {
@@ -198,10 +148,6 @@ class AirplaneGameController extends GetxController {
           killScore: killCount,
         ),
         barrierDismissible: false);
-    // Get.to(AirplaneGameOverWidget(
-    //   distanceMeter: score,
-    //   killScore: killCount,
-    // ));
     if (isRetry) {
       setNewGame();
       tryAgain();
