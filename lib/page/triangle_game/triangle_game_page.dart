@@ -1,10 +1,7 @@
 import 'package:flame/game.dart';
 import 'package:flame_practice/game/triangle_game/triangle_game.dart';
 import 'package:flame_practice/game/triangle_game/triangle_game_controller.dart';
-import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/src/widgets/container.dart';
-import 'package:flutter/src/widgets/framework.dart';
 import 'package:get/get.dart';
 import 'package:provider/provider.dart';
 
@@ -16,9 +13,6 @@ class TriangleGamePage extends StatefulWidget {
 }
 
 class _TriangleGamePageState extends State<TriangleGamePage> {
-  late TextEditingController _xEditingController;
-  late TextEditingController _yEditingController;
-
   @override
   void initState() {
     // TODO: implement initState
