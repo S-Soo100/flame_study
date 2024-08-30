@@ -3,10 +3,12 @@ import 'package:flame/components.dart';
 import 'package:flame_practice/game/airplane_game/airplane_game.dart';
 import 'dart:math' as math;
 
+import 'package:flame_practice/game/airplane_game/game_components/player_plane.dart';
+
 class EnemnyBullet extends SpriteComponent
     with CollisionCallbacks, HasGameRef<AirplaneGame> {
   final Vector2 direction;
-  final double speed = 100.0;
+  final double speed = 500.0;
 
   EnemnyBullet(Vector2 position, this.direction)
       : super(size: Vector2(12, 20)) {
@@ -30,6 +32,14 @@ class EnemnyBullet extends SpriteComponent
         position.y < 0 ||
         position.x > game.size.x ||
         position.x < 0) {
+      removeFromParent();
+    }
+  }
+
+  @override
+  void onCollision(Set<Vector2> points, PositionComponent other) {
+    super.onCollision(points, other);
+    if (other is PlayerPlane) {
       removeFromParent();
     }
   }
