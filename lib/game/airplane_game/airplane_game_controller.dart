@@ -55,7 +55,8 @@ class AirplaneGameController extends GetxController {
 
   void setNewGame() {
     _game = newGameInstance();
-    _phase = AirplaneGamePhase.phase4;
+    //todo debuggggggggggggggggggg
+    _phase = AirplaneGamePhase.phase5; //! debuging
   }
 
   @override

@@ -21,6 +21,7 @@ class Phase4EnemyComponent extends SpriteComponent
   double speed = 0.5;
   int _pattern = 0;
   int get pattern => _pattern;
+  final int finalPatternNumber = 4;
 
   @override
   Future<void> onLoad() async {
@@ -33,8 +34,9 @@ class Phase4EnemyComponent extends SpriteComponent
     sprite = await gameRef.loadSprite('airplane_game/enemies/ship_0002.png');
     shootTimer = Timer(3, onTick: () => {shoot(game, position)}, repeat: true);
     chargeTimer = Timer(15, onTick: () {
-      _pattern = 4;
+      _pattern = finalPatternNumber;
     }, repeat: false);
+    angle = -math.pi / 2.3;
   }
 
   double frequency = 1.0;
@@ -61,6 +63,7 @@ class Phase4EnemyComponent extends SpriteComponent
         firstPattern(dt);
         return;
       case 1:
+        angle = math.pi * 0.25;
         secondPattern(dt);
         return;
       case 2:
@@ -68,6 +71,9 @@ class Phase4EnemyComponent extends SpriteComponent
         return;
       case 3:
         groupingPattern(game, dt, position: position, id: id, y: size.y);
+        if (position.y < gameRef.size.y * 0.3) {
+          angle = -math.pi;
+        }
         return;
       case 4:
         chargePattern(game, position, dt);

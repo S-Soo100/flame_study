@@ -18,6 +18,7 @@ class Phase6EnemyComponent extends SpriteComponent
   double startAngle = 0;
   double endAngle = math.pi / 2;
   late double radius;
+  final int finalPatternNumber = 3;
 
   double speed = 0.5;
   int _pattern = 0;
@@ -33,7 +34,7 @@ class Phase6EnemyComponent extends SpriteComponent
     sprite = await gameRef.loadSprite('airplane_game/enemies/ship_0004.png');
     shootTimer = Timer(3, onTick: () => {shoot(game, position)}, repeat: true);
     chargeTimer = Timer(15, onTick: () {
-      _pattern = 3;
+      _pattern = finalPatternNumber;
     }, repeat: false);
   }
 

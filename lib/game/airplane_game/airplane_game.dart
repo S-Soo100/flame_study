@@ -60,7 +60,7 @@ class AirplaneGame extends FlameGame with TapCallbacks, HasCollisionDetection {
     await add(_gameBgSecond);
 
     _player = PlayerPlane(
-      playerSize: 50,
+      playerSize: size.x / 10,
       position: Vector2(size.x / 2, size.y - 100),
       hitAction: hitAction,
     );
@@ -110,14 +110,14 @@ class AirplaneGame extends FlameGame with TapCallbacks, HasCollisionDetection {
   }
 
   void setPhase4() {
-    phase4Enemies = List.generate(phaseEnemyAmount,
-        (index) => Phase4EnemyComponent(Vector2(size.x, 500), id: index));
+    phase4Enemies = List.generate(
+        phaseEnemyAmount, (index) => Phase4EnemyComponent(id: index));
     _phase4Timer = Timer(1, onTick: createPhase4Enemy, repeat: true);
   }
 
   void setPhase5() {
-    phase5Enemies = List.generate(phaseEnemyAmount,
-        (index) => Phase5EnemyComponent(Vector2(0, 500), id: index));
+    phase5Enemies = List.generate(
+        phaseEnemyAmount, (index) => Phase5EnemyComponent(id: index));
     _phase5Timer = Timer(1, onTick: createPhase5Enemy, repeat: true);
   }
 
@@ -223,8 +223,8 @@ class AirplaneGame extends FlameGame with TapCallbacks, HasCollisionDetection {
     if (phase5EnemyCount > phaseEndTime) {
       _phase5Timer?.stop();
       phase5EnemyCount = 0;
-      setPhase6();
-      _controller.setAirplaneGamePhase(AirplaneGamePhase.phase6);
+      setPhase1();
+      _controller.setAirplaneGamePhase(AirplaneGamePhase.phase1);
     }
   }
 

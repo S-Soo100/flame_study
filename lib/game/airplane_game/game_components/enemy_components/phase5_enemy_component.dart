@@ -8,8 +8,7 @@ import 'package:flutter/foundation.dart';
 
 class Phase5EnemyComponent extends SpriteComponent
     with CollisionCallbacks, HasGameRef<AirplaneGame>, EmenyComponentMixin {
-  Phase5EnemyComponent(Vector2 position, {required this.id}) : super() {
-    this.position = position;
+  Phase5EnemyComponent({required this.id}) : super() {
     id = id;
   }
   int id;
@@ -18,6 +17,7 @@ class Phase5EnemyComponent extends SpriteComponent
   double startAngle = 0;
   double endAngle = math.pi / 2;
   late double radius;
+  final int finalPatternNumber = 3;
 
   double speed = 0.5;
   int _pattern = 0;
@@ -26,14 +26,16 @@ class Phase5EnemyComponent extends SpriteComponent
   @override
   Future<void> onLoad() async {
     super.onLoad();
+    position = Vector2(0, gameRef.size.y * 0.6 - 50);
     size = setComponentSizeByGame(gameRef);
-    radius = gameRef.size.y * 0.3;
+    radius = gameRef.size.x * 0.5;
     anchor = Anchor.center;
     sprite = await gameRef.loadSprite('airplane_game/enemies/ship_0003.png');
     shootTimer = Timer(3, onTick: () => {shoot(game, position)}, repeat: true);
     chargeTimer = Timer(15, onTick: () {
-      _pattern = 3;
+      _pattern = finalPatternNumber;
     }, repeat: false);
+    angle = -0.5 * math.pi;
   }
 
   @override
@@ -58,6 +60,7 @@ class Phase5EnemyComponent extends SpriteComponent
         firstPattern(dt);
         return;
       case 1:
+        // secondPattern(dt);
         secondPattern(dt);
         return;
       case 2:
@@ -72,19 +75,32 @@ class Phase5EnemyComponent extends SpriteComponent
   }
 
   void firstPattern(double dt) {
-    if (position.x < gameRef.size.x * 0.1) {
+    if (position.x > gameRef.size.x * 1.1) {
       phaseChange();
+      angle = 0;
       return;
     }
-    position.x -= speed * 8;
+    position.x += speed * 8;
   }
 
   void secondPattern(double dt) {
-    if (position.x > gameRef.size.x * 0.75) {
+    if (position.y < gameRef.size.y * 0.2) {
+      angle = 0;
       phaseChange();
       return;
     }
-    position.lerp(Vector2(gameRef.size.x * 0.8, gameRef.size.y / 2), dt);
+    // 각도 업데이트
+    angle += speed * dt;
+    Vector2 myCenter = Vector2(gameRef.size.x, gameRef.size.y * 0.4);
+
+    // 반원 운동 제한 (0 ~ π)
+    if (angle > math.pi + math.pi / 2) {
+      angle = math.pi;
+    }
+
+    // 새로운 위치 계산
+    position.x = myCenter.x + radius * math.cos(angle);
+    position.y = myCenter.y + radius * math.sin(angle);
   }
 
   bool isDead() {
