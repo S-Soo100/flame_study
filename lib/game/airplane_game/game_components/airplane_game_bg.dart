@@ -1,6 +1,8 @@
 import 'package:flame/components.dart';
+import 'package:flame_practice/game/airplane_game/airplane_game.dart';
 
-class AirplaneGameBg extends SpriteComponent with HasGameRef {
+// HasGameRef의 타입을 지정해주세요.
+class AirplaneGameBg extends SpriteComponent with HasGameRef<AirplaneGame> {
   int type;
   AirplaneGameBg({required this.type});
 

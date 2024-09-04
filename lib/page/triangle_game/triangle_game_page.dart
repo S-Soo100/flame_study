@@ -45,7 +45,7 @@ class _TriangleGamePageState extends State<TriangleGamePage> {
                       alignment: Alignment.bottomRight,
                       child: Container(
                         margin: const EdgeInsets.all(4),
-                        width: Get.width * 0.4,
+                        width: Get.width,
                         height: 100,
                         decoration: BoxDecoration(
                           borderRadius: BorderRadius.circular(16),
