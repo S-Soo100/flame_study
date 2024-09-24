@@ -12,11 +12,25 @@
 혹은, 게임같은 앱을 만들거나 부분적으로 적용하는 것도 가능하다고 생각합니다만, Flame쪽 기능을 궁금해 하는 사람이 있을지 모르겠습니다.
 그래서 크게 알려지지 않겠지만 조금씩 Velog에도 내용을 정리해 보겠습니다.
 
-![Aug-30-2024 10-05-05](https://github.com/user-attachments/assets/ceee4599-042d-4c68-b7fd-37da7492ab41)
-- 이미지 1. 
-![Aug-30-2024 10-03-37](https://github.com/user-attachments/assets/c1862115-5fbb-4007-9eff-2780ce644c29)
-- 이미지 2. 
-![Aug-30-2024 10-04-11](https://github.com/user-attachments/assets/9c66dbe3-8f70-41be-82cc-a0c67037e6f4)
-- 이미지 3. 
 
+ <p align="center">
+  <img src="https://github.com/user-attachments/assets/ceee4599-042d-4c68-b7fd-37da7492ab41" alt="Aug-30-2024 10-05-05">
+  <br>
+  <em>삼각함수를 통해 오브젝트의 진행방향을 연구한 이미지</em>
+</p>
+  <br>
+ <p align="center">
+  <img src="https://github.com/user-attachments/assets/c1862115-5fbb-4007-9eff-2780ce644c29" alt="Aug-30-2024 10-03-37">
+  <br>
+  <em>예시:비행기 게임 이미지 1</em>
+</p>
+  <br>
+ <p align="center">
+  <img src="https://github.com/user-attachments/assets/9c66dbe3-8f70-41be-82cc-a0c67037e6f4" alt="Aug-30-2024 10-04-11">
+  <br>
+  <em>예시:비행기 게임 이미지 2</em>
+</p>
+
+  <br>  <br>  <br>
+추가 자료
 -[Velog에 정리한 Flame 기초중의 기초](https://velog.io/@s_soo100/Flutter-Flame-%EC%97%94%EC%A7%84%EC%9C%BC%EB%A1%9C-%EA%B0%84%EB%8B%A8%ED%95%9C-%EA%B2%8C%EC%9E%84%EC%9D%84-%EB%A7%8C%EB%93%A4%EC%96%B4%EB%B3%B4%EC%9E%90)
