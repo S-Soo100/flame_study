@@ -1,13 +1,15 @@
 import 'package:flame/collisions.dart';
 import 'package:flame/components.dart';
 import 'package:flame_audio/flame_audio.dart';
+import 'package:flame_practice/game/airplane_game/airplane_game.dart';
 import 'package:flame_practice/game/airplane_game/airplane_game_controller.dart';
 import 'package:flame_practice/game/airplane_game/game_components/enemy_plane.dart';
 import 'package:flame_practice/game/airplane_game/game_components/item.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
-class Bullet extends SpriteComponent with CollisionCallbacks, HasGameRef {
+class Bullet extends SpriteComponent
+    with CollisionCallbacks, HasGameRef<AirplaneGame> {
   Bullet({required position})
       : super(size: Vector2(16, 24), position: position);
   late ShapeHitbox hitbox;
